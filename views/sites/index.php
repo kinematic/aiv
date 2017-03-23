@@ -40,7 +40,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'filter' => Html::activeDropDownList(
                     $searchModel, 
                     'typeid', 
-                    ArrayHelper::map(Sitestype::find()->asArray()->orderBy(['name' => SORT_ASC])->all(), 
+                    ArrayHelper::map(Sitestype::find()->asArray()->where(['visible' => 1])->orderBy(['name' => SORT_ASC])->all(), 
                     'id', 
                     'name'),
                     [
@@ -51,15 +51,15 @@ $this->params['breadcrumbs'][] = $this->title;
                         
             ],
             [
-		'attribute' => 'regionid',
-		'value' => 'region',
-		'filter' => Html::activeDropDownList(
-		    $searchModel, 
-		    'regionid', 
-		    ArrayHelper::map(Sitesregion::find()->asArray()->orderBy(['name' => SORT_ASC])->all(), 
-		    'id', 
-		    'name'),
-		    ['class'=>'form-control','prompt' => '']),
+				'attribute' => 'regionid',
+				'value' => 'region',
+				'filter' => Html::activeDropDownList(
+					$searchModel, 
+					'regionid', 
+					ArrayHelper::map(Sitesregion::find()->asArray()->where(['visible' => 1])->orderBy(['name' => SORT_ASC])->all(), 
+					'id', 
+					'name'),
+					['class'=>'form-control','prompt' => '']),
             ],
             //'typeid',
             //'regionid',
@@ -77,6 +77,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\ActionColumn'],
         ],
     ]); 
+// 	print_r($searchModel);
 //     print_r($this);
     ?>
 </div>

@@ -46,7 +46,6 @@ class Sites extends \yii\db\ActiveRecord
     public $gpsval;
     
     
-    
     /**
      * @inheritdoc
      */
@@ -105,6 +104,7 @@ class Sites extends \yii\db\ActiveRecord
             'status' => 'статус',
             'molname' => 'МОЛ',
             'rel' => 'расположение',
+            'mustangaddress' => 'адрес из Мустанга',
         ];
     }
     
@@ -203,31 +203,30 @@ class Sites extends \yii\db\ActiveRecord
     }
     
     public function getFulladdress() {
-        $address = '';
-        if(isset($this->np->name)) $address .= $this->typenp->name . ' ' . $this->np->name;
-        if(isset($this->typestr->name) and isset($this->str->name)) {
-            if (!isset($this->typestr->position)) $address .= ', ' . $this->typestr->name . ' ' . $this->str->name;
-            else $address .= ', ' . $this->str->name . ' ' . $this->typestr->name;
-        }
-        if(isset($this->bud->value)) $address .= ', ' . $this->bud->value;
-        if(isset($this->np->capital)) {
-	    if(isset($this->rn->name) and $this->np->capital <> 2) $address .= ', ' . $this->rn->name . ' р-н';
-	    if(isset($this->obl->name) and $this->np->capital <> 1) $address .= ', ' . $this->obl->name . ' обл.';
-        } else {
-	    if(isset($this->rn->name)) $address .= ', ' . $this->rn->name . ' р-н';
-	    if(isset($this->obl->name)) $address .= ', ' . $this->obl->name . ' обл.';
-        }
-        
-        
-        
-        if(isset($this->descr->value)) $address .= ', ' . $this->descr->value;
-        
-        return $address;
+		$address = array();
+		if(isset($this->np->name) or isset($this->str->name)) {
+			if(isset($this->np->name)) {
+				if(isset($this->typenp->name)) $address[0] = $this->typenp->name. ' ' . $this->np->name;
+				else $address[0] = $this->np->name;
+			}
+			if(isset($this->str->name)) {
+				if(isset($this->typestr->name)) {
+					if (!isset($this->typestr->position)) $address[1] = $this->typestr->name . ' ' . $this->str->name;
+					else $address[1] = $this->str->name . ' ' . $this->typestr->name;
+				} else $address[1] = $this->str->name;
+			}
+			if(isset($this->bud->value)) $address[2] = $this->bud->value;
+			if(isset($this->np->capital)) {
+				if(isset($this->rn->name) and $this->np->capital <> 2) $address[3] = $this->rn->name . ' р-н';
+				if(isset($this->obl->name) and $this->np->capital <> 1) $address[4] = $this->obl->name . ' обл.';
+			} else {
+				if(isset($this->rn->name)) $address[3] = $this->rn->name . ' р-н';
+				if(isset($this->obl->name)) $address[4] = $this->obl->name . ' обл.';
+			}
+			if(isset($this->descr->value)) $address[5] = $this->descr->value;
+			return implode(', ', $address);
+        } else return $this->mustangaddress;
     }
-
-//     public function getGps() {
-//          return $this->hasOne(Gps::className(), [ 'id' => 'objid' ]);
-//     }
     
     public function getGps() {
          return $this->hasOne(Gps::className(), [ 'id' => 'valueid' ])
@@ -275,27 +274,50 @@ class Sites extends \yii\db\ActiveRecord
                 ->where('sites.id <> ' . $this->id);
     }
     
-    public function getOtherstandart() {
-        $length = strlen($this->nr);
-        if ($length >=3) {
-            if ($length >= 4) $nr = substr($this->nr, $length - 4, 4);
-            else if ($length == 3) $nr = $this->nr;
-        }
-        $length = strlen($this->nr);
+    public function getSearchNr() {
+	$length = strlen($this->nr);
+// 	if ($length < 8) {
+	    $nr = null;
+	    if ($length > 4) $nr = substr($this->nr, $length - 4, 4) + 0;
+	    else $nr = $this->nr;
+// 	    if ($length == 3) $nr = $this->nr;
+// 
+// 	    if ($length == 4) {
+// 			if (substr($this->nr, 0, 1) == 0) $nr = substr($this->nr, 1, 3);
+// 			else $nr = $this->nr;
+// 			$nr = $this->nr;
+// 	    }
+	    
+// 	    if (strlen($nr) == 4) {
+// 		if (substr($nr, 0, 1) == 0) $nr = substr($nr, 1, 3);
+// 	    }
+	    return $nr;
+// 	} else return $this->nr;
+    }
+    
+    public function getSearchOtherNr() {
+        $nr = $this->searchNr;
+        $length = strlen($nr);
+        if ($length > 7) return null; 
         $p3 = substr($nr, $length - 2, 2);
         $p2 = substr($nr, $length - 3, 1);
         if ($length == 4) $p1 = substr($nr, 0, 1);
         else $p1 = null;
+        
         if ($p2 == 0) $p2 = 8;
-        if ($p2 == 1) $p2 = 9;
-        if ($p2 == 2) $p2 = 7;
-        if ($p2 == 4) $p2 = 6;
-        if ($p2 == 6) $p2 = 4;
-        if ($p2 == 7) $p2 = 2;
-        if ($p2 == 8) $p2 = 0;
-        if ($p2 == 9) $p2 = 1;
-        if ($p1 == 0) $p1 = null;
+        else if ($p2 == 1) $p2 = 9;
+        else if ($p2 == 2) $p2 = 7;
+        else if ($p2 == 3) return null;
+        else if ($p2 == 4) $p2 = 6;
+        else if ($p2 == 5) return null;
+        else if ($p2 == 6) $p2 = 4;
+        else if ($p2 == 7) $p2 = 2;
+        else if ($p2 == 8) $p2 = 0;
+        else if ($p2 == 9) $p2 = 1;
+//         if ($p1 == 0) $p1 = null;
         
         return $p1 . $p2 . $p3;
+
     }
+
 }

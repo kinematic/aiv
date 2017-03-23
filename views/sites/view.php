@@ -29,11 +29,11 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'attribute' => 'fullgps',
                 'value' => function ($data) {
-		    if (isset($data->gps->lat))
-			return $data->fullgps . ' ' .
-			Html::a(Html::img('images/googleMaps.png', ['alt' => 'картинка', 'height' => '20', 'width' => '20']), 
-			Url::to('https://maps.google.com/maps?q=+' . $data->gps->lat / 1000000 . ',+' . $data->gps->long / 1000000 . '&hl=uk', true),
-			['target' => '_blank']);
+					if (isset($data->gps->lat))
+						return $data->fullgps . ' ' .
+						Html::a(Html::img('images/googleMaps.png', ['alt' => 'картинка', 'height' => '20', 'width' => '20']), 
+						Url::to('https://maps.google.com/maps?q=+' . $data->gps->lat / 1000000 . ',+' . $data->gps->long / 1000000 . '&hl=uk', true),
+						['target' => '_blank']);
                     else return null;
                 },
                 'format' => 'raw',
@@ -72,15 +72,16 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
         ]);
 ?>
-	<h3>Связанные объекты</h3>
+
 <?php
+        echo Html::a('<h3>Связанные объекты</h3>', ['relations', 'id' => $model->id], ['title' => 'Редактировать']);
         echo GridView::widget([
             'dataProvider' => $dataProvider,
             'columns' => [
             [
                 'attribute' => 'nr',
                 'value' => function ($data) {
-                    return Html::a(Html::encode($data->type . ' ' . $data->region . $data->nr), Url::to(['view', 'id' => $data->id]));
+                    return Html::a(Html::encode($data->sitename), Url::to(['view', 'id' => $data->id]));
                 },
                 'format' => 'raw',
                 'contentOptions' =>['style' => 'white-space: nowrap'],
@@ -90,7 +91,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ]
 
         ]); 
-        print $model->otherstandart;
+//         print $model->searchNr . '<br>' . $model->searchOtherNr;
 //     var_dump($model);
 //     print_r($this);
 //     print 'https://maps.google.com/maps?q=+' . $model->gps->lat / 1000000 . ',+' . $model->gps->long / 1000000 . '&hl=uk';

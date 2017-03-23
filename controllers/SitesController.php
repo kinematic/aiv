@@ -9,7 +9,7 @@ use app\models\address\Addresses;
 // use app\models\address\Obl;
 // use app\models\address\Rn;
 // use app\models\address\Typenp;
-use app\models\address\Np;
+// use app\models\address\Np;
 // use app\models\address\Typestr;
 // use app\models\address\Str;
 // use app\models\address\Bud;
@@ -120,16 +120,16 @@ class SitesController extends Controller
                 if ($key == 'gpsval') $typeid = 10;
                 
                 $modelname = array(
-		    1 => 'Obl',
-		    2 => 'Rn',
-		    3 => 'Typenp',
-		    4 => 'Np',
-		    5 => 'Typestr',
-		    6 => 'Str',
-		    7 => 'Bud',
-		    8 => 'Descr',
-		    9 => 'Comment',
-		    10 => 'Gps'
+					1 => 'Obl',
+					2 => 'Rn',
+					3 => 'Typenp',
+					4 => 'Np',
+					5 => 'Typestr',
+					6 => 'Str',
+					7 => 'Bud',
+					8 => 'Descr',
+					9 => 'Comment',
+					10 => 'Gps'
                 );
 //         		print $key . ' = ' .(int)$value . ' ' . $typeid .'<br>';
                 /*echo $key . ' = ' . $value . '<br>';*/ 
@@ -170,9 +170,8 @@ class SitesController extends Controller
             }
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
-            return $this->render('update', [
-                'model' => $model,
-            ]);
+	    if ($model->objid) return $this->render('update', ['model' => $model]);
+	    else return $this->render('relations', ['model' => $model]);
         }
     }
 
@@ -358,5 +357,51 @@ class SitesController extends Controller
             }
         
         }
+    }
+    
+	/**
+     * Displays a single Sites model.
+     * @param integer $id
+     * @return mixed
+     */
+    public function actionRelations($id)
+    {
+        return $this->render('relations', [
+            'model' => $this->findModel($id),
+        ]);
+// 		$searchModel = new SitesSearch();
+//         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+// 
+//         return $this->render('relations', [
+//             'searchModel' => $searchModel,
+//             'dataProvider' => $dataProvider,
+//         ]);
+    }
+    
+	public function actionJoinObject($objid, $siteid)
+    {
+		$model = Sites::find()->where(['id' => $siteid])->one();
+		$model->objid = $objid;
+		$model->save();
+		return $this->render('relations', ['model' => $model]);
+    }
+    
+	public function actionCreateObject($id)
+    {
+		$model = Sites::find()->where(['id' => $id])->one();
+		$maxObjID = Sites::find()->max('objid');
+		$model->objid = $maxObjID + 1;
+		$model->save();
+// 		print $maxObjID;
+		return $this->render('relations', ['model' => $model]);
+    }
+    
+	public function actionDeleteObject($id)
+    {
+		$model = Sites::find()->where(['id' => $id])->one();
+		$model->objid = null;
+		$model->save();
+// 		print $maxObjID;
+		return $this->render('relations', ['model' => $model]);
     }
 }

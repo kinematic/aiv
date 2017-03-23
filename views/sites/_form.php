@@ -23,8 +23,6 @@ use app\models\address\Gps;
 
 <div class="sites-form">
 
-    <?php if ($model->objid) {?>
-
     <?php $form = ActiveForm::begin(); ?>
     
     <?= $form->field($model, 'objid')->hiddenInput()->label(false);?>
@@ -146,52 +144,7 @@ use app\models\address\Gps;
 
     <?php ActiveForm::end(); ?>
     
-    <?php } else { ?>
-	<h3>Этот сайт не связан с сооружением</h3>
-	<?= Html::a('Создать', ['/sites/index'])?>
-	
-	<?php 
-	$dataProvider = new ArrayDataProvider([
-            'allModels' => $model->objects,
-            'key' => 'id',
-			'sort' => [
-				'defaultOrder' => [
-                    'nr' => SORT_ASC,
-                    //'second_name' => SORT_ASC,
-                ],
-				'attributes' => [
-					'nr' => [
-                        'asc' => ['nr' => SORT_ASC, 'nr' => SORT_ASC],
-                        'desc' => ['nr' => SORT_DESC, 'nr' => SORT_DESC],
-                   ],
-				],
-			],
-            'pagination' => [
-                 'pageSize' => 30,
-            ],
-        ]);
-        
-        echo GridView::widget([
-            'dataProvider' => $dataProvider,
-            'columns' => [
-            [
-                'attribute' => 'nr',
-                'value' => function ($data) {
-                    return Html::a(Html::encode($data->type . ' ' . $data->region . $data->nr), Url::to(['view', 'id' => $data->id]));
-                },
-                'format' => 'raw',
-                'contentOptions' =>['style' => 'white-space: nowrap'],
-            ],
-            'status',
-            'rel',
-            ]
 
-        ]); 
-	
-	?>
-	
-	
-    <?php };?>
 
 </div>
 

@@ -5,7 +5,6 @@ namespace app\models;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-//use yii\helpers\ArrayHelper;
 use app\models\Sites;
 
 /**
@@ -13,15 +12,18 @@ use app\models\Sites;
  */
 class SitesSearch extends Sites
 {
-    public $sitename;
+    public $oblid;
+    public $siteid;
+	public $relation;
+
     /**
      * @inheritdoc
      */
     public function rules()
     {
         return [
-            [['id', 'typeid', 'regionid', 'objid', 'relationid', 'statusid', 'molid'], 'integer'],
-            [['nr', 'description', 'opendate', 'closedate', 'inventdate', 'sitename'], 'safe'],
+            [['id', 'typeid', 'regionid', 'objid', 'relationid', 'statusid', 'molid', 'oblid', 'siteid'], 'integer'],
+            [['nr', 'description', 'opendate', 'closedate', 'inventdate', 'sitename', 'relation'], 'safe'],
         ];
     }
 
@@ -43,7 +45,7 @@ class SitesSearch extends Sites
      */
     public function search($params)
     {
-        $query = Sites::find()->joinWith(['sitestype'])->joinWith(['sitesregion'])->addOrderBy('nr');
+        $query = Sites::find();
 
         // add conditions that should always apply here
 
@@ -53,17 +55,6 @@ class SitesSearch extends Sites
 
         $dataProvider->setSort([
             'attributes' => [
-//                 'sitename' => [
-//                     'asc' => ['sitestype.name' => SORT_ASC, 'sitesregion.name' => SORT_ASC, 'nr' => SORT_ASC],
-//                     'desc' => ['sitestype.name' => SORT_DESC, 'sitesregion.name' => SORT_DESC, 'nr' => SORT_DESC],
-//                     'label' => 'Сайты'
-//                 ],
-//                 'type' => [
-//                     'asc' => ['sitestype.name' => SORT_ASC],
-//                     'desc' => ['sitestype.name' => SORT_DESC],
-//                     'label' => 'Типы',
-//                     //'filter'=>ArrayHelper::map(Sitestype::find()->asArray()->all(), 'id', 'name'),
-//                 ],
                 'typeid' => [
                     'asc' => ['typeid' => SORT_ASC],
                     'desc' => ['typeid' => SORT_DESC],
@@ -120,15 +111,40 @@ class SitesSearch extends Sites
 
         $query->andFilterWhere(['typeid' => $this->typeid])
 	    ->andFilterWhere(['regionid' => $this->regionid])
-	    ->andFilterWhere(['like', 'nr', $this->nr])
-            ->andFilterWhere(['like', 'description', $this->description])
-        ;
+	    
+	    ->andFilterWhere(['like', 'description', $this->description]);
+	    
+	    if (strlen($this->searchNr) == 3) $query->andFilterWhere(
+					[
+						'or', 
+						['like', 'nr', $this->searchNr, false],
+						['like', 'nr', $this->searchOtherNr, false],
+						['like', 'nr', '%0' . $this->searchNr, false],
+						['like', 'nr', '%0' . $this->searchOtherNr, false],
+					]
+				);
+		else $query->andFilterWhere(
+				[
+					'or', 
+					['like', 'nr', '%' . $this->nr, false],
+					['like', 'nr', '%' . $this->searchOtherNr, false],
+				]);
+		
+//         ;
 //         //$query->andWhere('sitestype.name LIKE "%' . $this->type . '%"');
 //         $query->joinWith(['sitestype' => function ($q) {
 //         $q->where('sitestype.name LIKE "%' . $this->type . '%"');
 //     }])
 //     ;
-            
+		if (isset($this->relation)) {
+			$query->innerJoinWith(['sitesregion']);
+			$query->andWhere(['sitesregion.oblid' => $this->oblid]);
+			$query->andWhere('sites.id <> ' . $this->siteid);
+			$query->andWhere('LENGTH(nr) < IF(LENGTH(' . $this->nr . ') < 5, 7, 12)');
+			if ($this->relation == 'nonObject') $query->andWhere('objid IS NULL');
+			if ($this->relation == 'withObject') $query->andFilterWhere(['<>', 'objid', $this->objid]);
+			$query->orderBy('objid, typeid, nr');
+		} else $query->orderBy('nr');
             
 
         return $dataProvider;
