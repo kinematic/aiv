@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use Yii;
+use yii\filters\AccessControl;
 use app\models\Sites;
 use app\models\SitesSearch;
 use app\models\address\Addresses;
@@ -16,7 +17,8 @@ use app\models\address\Addresses;
 // use app\models\address\Descr;
 // use app\models\address\Comment;
 use app\models\address\Gps;
-//use yii\helpers\ArrayHelper;
+
+use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -26,12 +28,37 @@ use yii\filters\VerbFilter;
  */
 class SitesController extends Controller
 {
+
+	public $modelsAddress = array(
+		1 => 'Obl',
+		2 => 'Rn',
+		3 => 'Typenp',
+		4 => 'Np',
+		5 => 'Typestr',
+		6 => 'Str',
+		7 => 'Bud',
+		8 => 'Descr',
+		9 => 'Comment',
+		10 => 'Gps'
+	);
+	
     /**
      * @inheritdoc
      */
     public function behaviors()
     {
         return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'only' => ['logout'],
+                'rules' => [
+                    [
+//                         'actions' => ['logout'],
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                ],
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
@@ -119,20 +146,6 @@ class SitesController extends Controller
                 if ($key == 'commentval') $typeid = 9;
                 if ($key == 'gpsval') $typeid = 10;
                 
-                $modelname = array(
-					1 => 'Obl',
-					2 => 'Rn',
-					3 => 'Typenp',
-					4 => 'Np',
-					5 => 'Typestr',
-					6 => 'Str',
-					7 => 'Bud',
-					8 => 'Descr',
-					9 => 'Comment',
-					10 => 'Gps'
-                );
-//         		print $key . ' = ' .(int)$value . ' ' . $typeid .'<br>';
-                /*echo $key . ' = ' . $value . '<br>';*/ 
                 $isAddress = null;
                 $Addresses = Addresses::find()->where(['objid' => $objid, 'typeid' => $typeid])->one();
                 if (isset($Addresses->id)) $isAddress = 1;
@@ -146,25 +159,25 @@ class SitesController extends Controller
                     //если нет, добавляем
                     } else {
                     
-                        if ($typeid == 1) $this->recordAddresses($Addresses, $isAddress, $modelname[$typeid], $objid, $typeid, $value);
-                        if ($typeid == 2) $this->recordAddresses($Addresses, $isAddress, $modelname[$typeid], $objid, $typeid, $value);
-                        if ($typeid == 4) $this->recordAddresses($Addresses, $isAddress, $modelname[$typeid], $objid, $typeid, $value);
-                        if ($typeid == 6) $this->recordAddresses($Addresses, $isAddress, $modelname[$typeid], $objid, $typeid, $value);
-                        if ($typeid == 7) $this->inserStringValues($Addresses, $isAddress, $modelname[$typeid], $objid, $typeid, $value);
-                        if ($typeid == 8) $this->inserStringValues($Addresses, $isAddress, $modelname[$typeid], $objid, $typeid, $value);
-                        if ($typeid == 9) $this->inserStringValues($Addresses, $isAddress, $modelname[$typeid], $objid, $typeid, $value);
+                        if ($typeid == 1) $this->recordAddresses($Addresses, $isAddress, $this->modelsAddress[$typeid], $objid, $typeid, $value);
+                        if ($typeid == 2) $this->recordAddresses($Addresses, $isAddress, $this->modelsAddress[$typeid], $objid, $typeid, $value);
+                        if ($typeid == 4) $this->recordAddresses($Addresses, $isAddress, $this->modelsAddress[$typeid], $objid, $typeid, $value);
+                        if ($typeid == 6) $this->recordAddresses($Addresses, $isAddress, $this->modelsAddress[$typeid], $objid, $typeid, $value);
+                        if ($typeid == 7) $this->inserStringValues($Addresses, $isAddress, $this->modelsAddress[$typeid], $objid, $typeid, $value);
+                        if ($typeid == 8) $this->inserStringValues($Addresses, $isAddress, $this->modelsAddress[$typeid], $objid, $typeid, $value);
+                        if ($typeid == 9) $this->inserStringValues($Addresses, $isAddress, $this->modelsAddress[$typeid], $objid, $typeid, $value);
                         if ($typeid == 10) $this->workOnGPS($Addresses, $isAddress, $objid, $value);
 //                         print 'typeid = ' . $typeid . ' value = ' . $value . '<br>';
                     }
                 } else {
                     if ($isAddress) {
-                    $tmp = $modelname[$typeid];
-                    if ($this->countAddresses($modelname[$typeid], $Addresses->valueid) < 2) {
-                        $tmp = 'app\\models\\address\\' . $modelname[$typeid];
-                        $tmpModel = $tmp::find()->where(['id' => $Addresses->valueid])->one();
-                        $tmpModel->delete();
-                    }
-                    $Addresses->delete();
+	                    $tmp = $this->modelsAddress[$typeid];
+	                    if ($this->countAddresses($this->modelsAddress[$typeid], $Addresses->valueid) < 2) {
+	                        $tmp = 'app\\models\\address\\' . $this->modelsAddress[$typeid];
+	                        $tmpModel = $tmp::find()->where(['id' => $Addresses->valueid])->one();
+	                        $tmpModel->delete();
+	                    }
+	                    $Addresses->delete();
                     }
                 }
             }
@@ -249,12 +262,12 @@ class SitesController extends Controller
     
     public function countAddresses ($modelname, $valueid)
     {
-	$modelname = strtolower($modelname);
-	$tmp = Addresses::find()
-	    ->innerJoinWith($modelname)
-	    ->where(['valueid' => $valueid])
-	    ->count();
-        if (isset($tmp)) return $tmp;
+		$modelname = strtolower($modelname);
+		$countAddresses = Addresses::find()
+		    ->innerJoinWith($modelname)
+		    ->where(['valueid' => $valueid])
+		    ->count();
+        if (isset($countAddresses)) return $countAddresses;
         else return null;
     }
     
@@ -366,23 +379,22 @@ class SitesController extends Controller
      */
     public function actionRelations($id)
     {
-        return $this->render('relations', [
-            'model' => $this->findModel($id),
-        ]);
-// 		$searchModel = new SitesSearch();
-//         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-// 
-//         return $this->render('relations', [
-//             'searchModel' => $searchModel,
-//             'dataProvider' => $dataProvider,
-//         ]);
+		$model = $this->findModel($id);
+		$model->load(Yii::$app->request->queryParams);
+// 		if(!$model->searchByNumber) $model->searchByNumber = $model->nr;
+		return $this->render('relations', [
+			'model' => $model,
+		]);
     }
     
-	public function actionJoinObject($objid, $siteid)
+	public function actionJoinObject($id, $objID, $siteID, $relationID, $searchByNumber)
     {
-		$model = Sites::find()->where(['id' => $siteid])->one();
-		$model->objid = $objid;
+		$model = $this->findModel($siteID);
+		$model->objid = $objID;
+		$model->relationid = $relationID;
 		$model->save();
+		$model = $this->findModel($id);
+		$model->searchByNumber = $searchByNumber;
 		return $this->render('relations', ['model' => $model]);
     }
     
@@ -391,17 +403,37 @@ class SitesController extends Controller
 		$model = Sites::find()->where(['id' => $id])->one();
 		$maxObjID = Sites::find()->max('objid');
 		$model->objid = $maxObjID + 1;
+		$model->relationid = 2;
 		$model->save();
-// 		print $maxObjID;
 		return $this->render('relations', ['model' => $model]);
     }
     
-	public function actionDeleteObject($id)
+	public function actionDeleteObject($id, $deleteID, $searchByNumber)
     {
-		$model = Sites::find()->where(['id' => $id])->one();
-		$model->objid = null;
-		$model->save();
-// 		print $maxObjID;
+		$deleteModel = $this->findModel($deleteID);
+		$objID = $deleteModel->objid;
+		$objCount = Sites::find()->where(['objid' => $objID])->count();
+
+		if ($objCount == 1) {
+			$Addresses = Addresses::find()->where(['objid' => $objID])->all();
+			foreach($Addresses as $address) {
+	            $typeAddress = $this->modelsAddress[$address->typeid];
+	            $valueAddressID = $address->valueid;
+	            if ($this->countAddresses($typeAddress, $valueAddressID) == 1) {
+	                $tmp = 'app\\models\\address\\' . $typeAddress;
+	                $tmpModel = $tmp::find()->where(['id' => $valueAddressID])->one();
+	                $tmpModel->delete();
+	            }
+	            $address->delete();
+			}
+		}
+		$deleteModel->objid = null;
+		$deleteModel->relationid = null;
+		$deleteModel->save();
+		$model = $this->findModel($id);
+		$model->searchByNumber = $searchByNumber;
 		return $this->render('relations', ['model' => $model]);
     }
+    
+
 }

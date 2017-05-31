@@ -19,10 +19,10 @@ class SiteController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['logout'],
+                'only' => ['loguot'],
                 'rules' => [
                     [
-                        'actions' => ['logout'],
+//                         'actions' => ['logout'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -31,7 +31,7 @@ class SiteController extends Controller
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
-                    'logout' => ['post'],
+                    'delete' => ['post'],
                 ],
             ],
         ];

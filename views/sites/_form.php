@@ -39,9 +39,8 @@ use app\models\address\Gps;
     else $model->oblid = '';
     $data = ArrayHelper::map(Obl::find()->addOrderBy('name')->all(), 'id', 'name');
     $data = array('' => '') + $data;
-    ?>
     
-    <?= $form->field($model, 'oblid')->widget(Selectize::className(), [
+    echo $form->field($model, 'oblid')->widget(Selectize::className(), [
             'items' => $data,
             'pluginOptions' => [
                 'persist' => false,

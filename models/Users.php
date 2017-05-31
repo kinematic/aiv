@@ -11,7 +11,7 @@ use Yii;
  * @property string $username
  * @property string $firstname
  * @property integer $secondnameid
- * @property integer $patronimicnameid
+ * @property integer $patronymicnameid
  * @property string $auth_key
  * @property string $password_hash
  * @property string $password_reset_token
@@ -39,7 +39,7 @@ class Users extends \yii\db\ActiveRecord
     {
         return [
             [['username', 'auth_key', 'password_hash', 'email'], 'required'],
-            [['secondnameid', 'patronimicnameid', 'mobilephone', 'status'], 'integer'],
+            [['secondnameid', 'patronymicnameid', 'mobilephone', 'status'], 'integer'],
             [['created_at', 'updated_at', 'lastlogin'], 'safe'],
             [['username', 'password_hash', 'password_reset_token', 'email'], 'string', 'max' => 255],
             [['firstname', 'auth_key'], 'string', 'max' => 32],
@@ -56,23 +56,46 @@ class Users extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'username' => 'Username',
-            'firstname' => 'Firstname',
-            'secondnameid' => 'Secondnameid',
-            'patronimicnameid' => 'Patronimicnameid',
+            'username' => 'логин',
+            'firstname' => 'фамилия',
+            'secondname.name' => 'имя',
+            'secondnameid' => 'имя',
+            'patronymicname.name' => 'отчество',
+			'patronymicnameid' => 'отчество',
             'auth_key' => 'Auth Key',
             'password_hash' => 'Password Hash',
             'password_reset_token' => 'Password Reset Token',
             'email' => 'Email',
-            'mobilephone' => 'Mobilephone',
-            'status' => 'Status',
-            'created_at' => 'Created At',
-            'updated_at' => 'Updated At',
-            'lastlogin' => 'Lastlogin',
+            'mobilephone' => 'мобильный номер',
+            'status' => 'состояние',
+            'created_at' => 'создан',
+            'updated_at' => 'обновлён',
+            'lastlogin' => 'последнее посещение',
         ];
     }
 
     public function getSecondname() {
          return $this->hasOne(Usersecondname::className(), [ 'id' => 'secondnameid' ]);
+    }
+
+    public function getPatronymicname() {
+         return $this->hasOne(Userpatronymicname::className(), [ 'id' => 'patronymicnameid' ]);
+    }
+
+	public function getSignature() {
+		return mb_substr($this->secondname->name, 0, 1) . '.' . mb_substr($this->patronymicname->name, 0, 1) . '. ' . $this->firstname;
+	}
+
+	public function getFullname() {
+		if(isset($this->secondname->name)) $secondname = $this->secondname->name;
+		else $secondname = null;
+		if(isset($this->patronymicname->name)) $patronymicname = $this->patronymicname->name;
+		else $patronymicname = null;
+		return $this->firstname . ' ' . $secondname . ' ' . $patronymicname;
+
+	}
+	
+    public function getMolname() {
+       return $this->secondname->name . ' ' . $this->firstname;
     }
 }

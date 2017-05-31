@@ -22,18 +22,17 @@ $this->params['breadcrumbs'][] = 'Связи';
 	<p><b>адрес: </b><?= $model->fulladdress ?></p>
 
 	<?php if(isset($model->objid)) {?>
-
-	<p>Сайт связан с сооружением, <?= Html::a('удалить?', ['delete-object', 'id' => $model->id])?></p>
 	
-	<h3>Существующие связи</h3>
+	<?= $this->render('_searchrelation', ['model' => $model]);?>
+	
+	
 	<?php	
-	    $dataProvider = new ArrayDataProvider([
-            'allModels' => $model->objects,
-            'key' => 'id',
-        ]);
-
         echo GridView::widget([
-            'dataProvider' => $dataProvider,
+            'dataProvider' => new ArrayDataProvider([
+				'allModels' => $model->relations,
+				'key' => 'id',
+			]),
+			'caption' => '<h3>существующие связи</h3>',
             'columns' => [
 				[
 					'attribute' => 'nr',
@@ -45,7 +44,23 @@ $this->params['breadcrumbs'][] = 'Связи';
 				],
 				'status',
 				'rel',
-				
+				['class' => 'yii\grid\ActionColumn',
+					'template'=>'{deleteJoin}',
+					'buttons'=>[
+						'deleteJoin' => function ($url, $othermodel) {
+							return Html::a('<span class="glyphicon glyphicon-minus iconJoinDelete"></span>', $url, [
+									'title' => Yii::t('yii', 'удалить связь'),
+							]);                                
+						},
+					],
+					'urlCreator' => function ($action, $othermodel, $key, $index) use ($model) {
+						
+						if ($action === 'deleteJoin') {
+							$url ='index.php?r=sites/delete-object&id=' . $model->id . '&deleteID=' . $othermodel->id . '&searchByNumber=' . $model->searchByNumber;
+							return $url;
+						}
+					}                           
+				]
             ]
 
         ]); 
@@ -59,7 +74,7 @@ $this->params['breadcrumbs'][] = 'Связи';
 	
 	
 	
-	<h3>Предполагаемые сайты с сооружением</h3>
+	
 	
 	<?php 
 	$searchModel = new SitesSearch();
@@ -68,8 +83,8 @@ $this->params['breadcrumbs'][] = 'Связи';
 									'relation' => 'withObject',
 									'siteid' => $model->id,
 									'objid' => $model->objid,
-									'nr' => $model->nr, 
-									'oblid' => $model->sitesregion->oblid,
+									'nr' => $model->searchByNumber, 
+									'oblid2' => $model->sitesregion->oblid,
 								]
 							]);
     if(!$model->objid) $actionColumn = 
@@ -78,23 +93,23 @@ $this->params['breadcrumbs'][] = 'Связи';
 			'buttons'=>[
 				'joinOne' => function ($url, $othermodel) {
 					return Html::a('<span class="glyphicon glyphicon-plus"></span>', $url, [
-							'title' => Yii::t('yii', 'присоединить в тоже место'),
+							'title' => Yii::t('yii', 'на площадке RBS'),
 					]);                                
 				},
 				'joinOther' => function ($url, $othermodel) {
 					return Html::a('<span class="glyphicon glyphicon-plus iconJoinOther"></span>', $url, [
-							'title' => Yii::t('yii', 'присоединить в другое место'),
+							'title' => Yii::t('yii', 'на отдельной площадке'),
 					]);                                
 				}
 			],
 			'urlCreator' => function ($action, $othermodel, $key, $index) use ($model) {
 				
 				if ($action === 'joinOne') {
-					$url ='index.php?r=sites/join-object&objid=' . $othermodel->objid . '&siteid=' . $model->id;
+					$url ='index.php?r=sites/join-object&id=' . $model->id . '&objID=' . $othermodel->objid . '&siteID=' . $model->id . '&relationID=2' . '&searchByNumber=' . $model->searchByNumber;
 					return $url;
 				}
 				if ($action === 'joinOther') {
-					$url ='index.php?r=sites/join-object&objid=' . $othermodel->objid . '&siteid=' . $model->id;
+					$url ='index.php?r=sites/join-object&id=' . $model->id . '&objID=' . $othermodel->objid . '&siteID=' . $model->id . '&relationID=3' . '&searchByNumber=' . $model->searchByNumber;
 					return $url;
 				}
 
@@ -103,6 +118,7 @@ $this->params['breadcrumbs'][] = 'Связи';
 	else $actionColumn = [];
     echo GridView::widget([
         'dataProvider' => $dataProvider,
+        'caption' => '<h3>предполагаемые сайты с сооружением</h3>',
         'columns' => [
 			[
 				'attribute' => 'nr',
@@ -122,7 +138,7 @@ $this->params['breadcrumbs'][] = 'Связи';
 	?>
 
 
-	<h3>Предполагаемые сайты без сооружения</h3>
+	
 	
 	<?php 
 
@@ -131,32 +147,41 @@ $this->params['breadcrumbs'][] = 'Связи';
 									[
 										'relation' => 'nonObject',
 										'siteid' => $model->id,
-										'nr' => $model->nr, 
-										'oblid' => $model->sitesregion->oblid,
+										'nr' => $model->searchByNumber, 
+										'oblid2' => $model->sitesregion->oblid,
 									]
 								]);
     if($model->objid) $actionColumn = 
 		['class' => 'yii\grid\ActionColumn',
-			'template'=>'{join}',
+			'template'=>'{joinOne} {joinOther}',
 			'buttons'=>[
-				'join' => function ($url, $othermodel) {
+				'joinOne' => function ($url, $othermodel) {
 					return Html::a('<span class="glyphicon glyphicon-plus"></span>', $url, [
-							'title' => Yii::t('yii', 'присоединиться'),
+							'title' => Yii::t('yii', 'на площадке RBS'),
 					]);                                
-				}
+				},
+				'joinOther' => function ($url, $othermodel) {
+					return Html::a('<span class="glyphicon glyphicon-plus iconJoinOther"></span>', $url, [
+							'title' => Yii::t('yii', 'на отдельной площадке'),
+					]);                                
+				}                            
 			],
 			'urlCreator' => function ($action, $othermodel, $key, $index) use ($model) {
 				
-				if ($action === 'join') {
-					$url ='index.php?r=sites/join-object&objid=' . $model->objid . '&siteid=' . $key;
+				if ($action === 'joinOne') {
+					$url ='index.php?r=sites/join-object&id=' . $model->id . '&objID=' . $model->objid . '&siteID=' . $key . '&relationID=2' . '&searchByNumber=' . $model->searchByNumber;
 					return $url;
 				}
-
+				if ($action === 'joinOther') {
+					$url ='index.php?r=sites/join-object&id=' . $model->id . '&objID=' . $model->objid . '&siteID=' . $key . '&relationID=3' . '&searchByNumber=' . $model->searchByNumber;
+					return $url;
+				}
 			}                           
 		];
   	else $actionColumn = [];
         echo GridView::widget([
             'dataProvider' => $dataProvider,
+            'caption' => '<h3>предполагаемые сайты без сооружения</h3>',
             'columns' => [
             [
                 'attribute' => 'nr',
@@ -170,7 +195,9 @@ $this->params['breadcrumbs'][] = 'Связи';
 			$actionColumn,
             ]
         ]); 
-
+// print_r($model->sitesregion) ;
+// print $model->searchmode;
 	?>
+	<?php //if($model->searchmode <> 2) echo Html::a('Найти другой сайт', ['relations', 'id' => $model->id, 'searchmode' => 2], ['class' => 'btn btn-success']) ?>
 	
 </div>

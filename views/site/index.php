@@ -19,8 +19,10 @@ $this->title = 'AIV2';
                 <h2>Люди</h2>
 
                 <p><a class="btn btn-default" href="index.php?r=users">Пользователи &raquo;</a></p>
-                <p><a class="btn btn-default" href="index.php?r=usersecondname">Имена &raquo;</a></p>
-                <p><a class="btn btn-default" href="index.php?r=userpatronimicname">Отчества &raquo;</a></p>
+				<p><a class="btn btn-default" href="index.php?r=people/people">Люди &raquo;</a></p>
+                <p><a class="btn btn-default" href="index.php?r=people/secondname">Имена &raquo;</a></p>
+                <p><a class="btn btn-default" href="index.php?r=people/patronymicname">Отчества &raquo;</a></p>
+				<p><a class="btn btn-default" href="index.php?r=people/position">Должности &raquo;</a></p>
             </div>
             <div class="col-lg-4">
                 <h2>Объекты</h2>
@@ -42,7 +44,14 @@ $this->title = 'AIV2';
                 <p><a class="btn btn-default" href="index.php?r=address/descr">Название месности &raquo;</a></p>
                 <p><a class="btn btn-default" href="index.php?r=address/comment">Описание &raquo;</a></p>
             </div>
+			<div class="col-lg-4">
+                <h2>Инвентаризация</h2>
+
+                <p><a class="btn btn-default" href="index.php?r=inventory/catalog">Справочник оборудования &raquo;</a></p>
+                <p><a class="btn btn-default" href="index.php?r=inventory/discrepancy">Расхождения &raquo;</a></p>
+            </div>
         </div>
+
 
     </div>
 </div>

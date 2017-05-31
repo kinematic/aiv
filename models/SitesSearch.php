@@ -12,9 +12,11 @@ use app\models\Sites;
  */
 class SitesSearch extends Sites
 {
-    public $oblid;
+    public $oblid2;
     public $siteid;
 	public $relation;
+	public $sitetype;
+// 	public $searchmode;
 
     /**
      * @inheritdoc
@@ -22,8 +24,8 @@ class SitesSearch extends Sites
     public function rules()
     {
         return [
-            [['id', 'typeid', 'regionid', 'objid', 'relationid', 'statusid', 'molid', 'oblid', 'siteid'], 'integer'],
-            [['nr', 'description', 'opendate', 'closedate', 'inventdate', 'sitename', 'relation'], 'safe'],
+            [['id', 'typeid', 'regionid', 'objid', 'relationid', 'statusid', 'molid', 'oblid2', 'siteid'], 'integer'],
+            [['nr', 'description', 'opendate', 'closedate', 'inventdate', 'sitename', 'relation', 'sitetype'], 'safe'],
         ];
     }
 
@@ -55,16 +57,16 @@ class SitesSearch extends Sites
 
         $dataProvider->setSort([
             'attributes' => [
-                'typeid' => [
-                    'asc' => ['typeid' => SORT_ASC],
-                    'desc' => ['typeid' => SORT_DESC],
-                    'label' => 'типы',
-                ],
-                'regionid' => [
-                    'asc' => ['regionid' => SORT_ASC],
-                    'desc' => ['regionid' => SORT_DESC],
-                    'label' => 'регионы',
-                ],
+//                 'typeid' => [
+//                     'asc' => ['typeid' => SORT_ASC],
+//                     'desc' => ['typeid' => SORT_DESC],
+//                     'label' => 'типы',
+//                 ],
+//                 'regionid' => [
+//                     'asc' => ['regionid' => SORT_ASC],
+//                     'desc' => ['regionid' => SORT_DESC],
+//                     'label' => 'регионы',
+//                 ],
                 'nr' => [
                     'asc' => ['nr' => SORT_ASC],
                     'desc' => ['nr' => SORT_DESC],
@@ -109,10 +111,10 @@ class SitesSearch extends Sites
 //             'inventdate' => $this->inventdate,
 //         ]);
 
-        $query->andFilterWhere(['typeid' => $this->typeid])
-	    ->andFilterWhere(['regionid' => $this->regionid])
+//         $query->andFilterWhere(['typeid' => $this->typeid])
+// 	    ->andFilterWhere(['regionid' => $this->regionid])
 	    
-	    ->andFilterWhere(['like', 'description', $this->description]);
+	    $query->andFilterWhere(['like', 'description', $this->description]);
 	    
 	    if (strlen($this->searchNr) == 3) $query->andFilterWhere(
 					[
@@ -136,15 +138,24 @@ class SitesSearch extends Sites
 //         $q->where('sitestype.name LIKE "%' . $this->type . '%"');
 //     }])
 //     ;
-		if (isset($this->relation)) {
+		if($this->sitetype) {
+			$query->innerJoinWith(['sitestype']);
+			$query->andFilterWhere(['like', 'sitestype.name', $this->sitetype . '%', false]);
+		}
+		if($this->oblid2) {
 			$query->innerJoinWith(['sitesregion']);
-			$query->andWhere(['sitesregion.oblid' => $this->oblid]);
+			$query->andFilterWhere(['sitesregion.oblid' => $this->oblid2]);
+
+		}
+		if (isset($this->relation)) {
+// 			$query->innerJoinWith(['sitesregion']);
+// 			$query->andWhere(['sitesregion.oblid' => $this->oblid2]);
 			$query->andWhere('sites.id <> ' . $this->siteid);
-			$query->andWhere('LENGTH(nr) < IF(LENGTH(' . $this->nr . ') < 5, 7, 12)');
+			$query->andWhere('LENGTH(nr) < IF(LENGTH(' . $this->nr . ') < 6, 8, 13)');
 			if ($this->relation == 'nonObject') $query->andWhere('objid IS NULL');
-			if ($this->relation == 'withObject') $query->andFilterWhere(['<>', 'objid', $this->objid]);
+			if ($this->relation == 'withObject') $query->andFilterWhere(['<>', 'objid', $this->objid])->andWhere('objid IS NOT NULL');
 			$query->orderBy('objid, typeid, nr');
-		} else $query->orderBy('nr');
+		} else $query->orderBy('typeid, regionid, nr');
             
 
         return $dataProvider;

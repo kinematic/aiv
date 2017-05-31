@@ -45,56 +45,114 @@ $this->params['breadcrumbs'][] = $this->title;
             //'description:ntext',
             'comment.value:ntext',
             'status',
-            'molname',
+            'mol.molname',
             'opendate',
             'closedate',
             'inventdate',
         ],
     ]);
     
-        $dataProvider = new ArrayDataProvider([
-            'allModels' => $model->objects,
-            'key' => 'id',
-			'sort' => [
-				'defaultOrder' => [
-                    'nr' => SORT_ASC,
-                    //'second_name' => SORT_ASC,
-                ],
-				'attributes' => [
-					'nr' => [
-                        'asc' => ['nr' => SORT_ASC, 'nr' => SORT_ASC],
-                        'desc' => ['nr' => SORT_DESC, 'nr' => SORT_DESC],
-                   ],
-				],
-			],
-            'pagination' => [
-                 'pageSize' => 30,
-            ],
-        ]);
+//         $dataProvider = new ArrayDataProvider([
+//             'allModels' => $model->relations,
+//             'key' => 'id',
+//         ]);
 ?>
 
 <?php
-        echo Html::a('<h3>Связанные объекты</h3>', ['relations', 'id' => $model->id], ['title' => 'Редактировать']);
         echo GridView::widget([
-            'dataProvider' => $dataProvider,
+            'dataProvider' => new ArrayDataProvider([
+	            'allModels' => $model->relations,
+	            'key' => 'id',
+	        ]),
+	        'caption' => Html::a('<h3>связанные сайты</h3>', ['relations', 'id' => $model->id, 'searchmode' => 1], ['title' => 'Редактировать']),
+	        'showOnEmpty' => false,
+	        'emptyText' => '<p>Сайт не связан с сооружением, ' . Html::a('создать?', ['create-object', 'id' => $model->id]) . '</p>',
+	        'layout' => "{items}",
             'columns' => [
-            [
-                'attribute' => 'nr',
-                'value' => function ($data) {
-                    return Html::a(Html::encode($data->sitename), Url::to(['view', 'id' => $data->id]));
-                },
-                'format' => 'raw',
-                'contentOptions' =>['style' => 'white-space: nowrap'],
-            ],
-            'status',
-            'rel',
+	            [
+	                'attribute' => 'nr',
+	                'value' => function ($data) {
+	                    return Html::a(Html::encode($data->sitename), Url::to(['view', 'id' => $data->id]));
+	                },
+	                'format' => 'raw',
+	                'contentOptions' =>['style' => 'white-space: nowrap'],
+	            ],
+	            'status',
+	            'rel',
             ]
 
         ]); 
+
+        echo GridView::widget([
+            'dataProvider' => new ArrayDataProvider([
+	            'allModels' => $model->contacts,
+	            
+	            'key' => 'id',
+	        ]),
+	        'caption' => Html::a('<h3>контакты</h3>', ['/contacts', 'siteID' => $model->id], ['title' => 'Редактировать']),
+	        'showHeader' => false,
+	        'showOnEmpty' => false,
+	        'emptyText' => '',
+	        'layout' => "{items}",
+            'columns' => [
+	            [
+	                'attribute' => 'contact',
+	                'contentOptions' =>['style' => 'white-space: nowrap'],
+	            ],
+	            'description',
+            ]
+
+        ]); 
+        
+        echo GridView::widget([
+            'dataProvider' => new ArrayDataProvider([
+	            'allModels' => $model->discrepancy,
+	            
+	            'key' => 'id',
+	        ]),
+// 	        'caption' => Html::a('<h3>расхождения инвентаризации</h3>', ['inventory/discrepancy', 'DiscrepancySearch[siteid]' => $model->id], 
+// 								['title' => 'Редактировать', 'name' => 'discrepancy']),
+			'caption' => '<h3 style="display:inline">расхождения инвентаризации</h3>' . ' ' . Html::a('<span class="glyphicon glyphicon-plus"></span>', ['inventory/discrepancy/create', 'Discrepancy[siteid]' => $model->id], ['title' => Yii::t('yii', 'добавить')]),
+	        'showHeader' => false,
+	        'showOnEmpty' => true,
+	        'emptyText' => '',
+	        'layout' => "{items}",
+            'columns' => [
+				[
+	                'attribute' => 'sites.sitename',
+	                'value' => function ($data) {
+	                    return Html::a(Html::encode($data->sites->sitename), Url::to(['view', 'id' => $data->siteid]));
+	                },
+	                'format' => 'raw',
+	                'contentOptions' =>['style' => 'white-space: nowrap'],
+	            ],
+				'discrepancy',
+	            [
+	                'attribute' => 'catalog.codename',
+	                'contentOptions' =>['style' => 'white-space: nowrap'],
+	            ],
+	            'partcount',
+	            'description',
+				[
+					'class' => 'yii\grid\ActionColumn',
+					'urlCreator'=>function($action, $model, $key, $index){
+						return ['inventory/discrepancy/' . $action,'id'=>$model->id, 'siteid'=>$model->siteid];
+					},
+					'contentOptions' =>['style' => 'white-space: nowrap'],
+				],
+				
+            ]
+
+        ]);
+        
 //         print $model->searchNr . '<br>' . $model->searchOtherNr;
 //     var_dump($model);
 //     print_r($this);
 //     print 'https://maps.google.com/maps?q=+' . $model->gps->lat / 1000000 . ',+' . $model->gps->long / 1000000 . '&hl=uk';
 
     ?>
+	<p>
+        <?= Html::a('Письма на проход', ['letters/letters/viewbyobjid', 'objid' => $model->objid], ['class' => 'btn btn-primary']) ?>
+        
+    </p>
   </div>

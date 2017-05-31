@@ -14,6 +14,8 @@ use app\models\address\Bud;
 use app\models\address\Descr;
 use app\models\address\Comment;
 use app\models\address\Gps;
+use app\models\inventory\Discrepancy;
+use app\models\people\People;
 
 /**
  * This is the model class for table "sites".
@@ -33,8 +35,9 @@ use app\models\address\Gps;
  */
 class Sites extends \yii\db\ActiveRecord
 {
-    public $oblid;
-    public $oblname;
+//     public $oblid;
+//     public $oblname;
+	public $oblid;
     public $rnid;
     public $typenpid;
     public $npid;
@@ -44,7 +47,8 @@ class Sites extends \yii\db\ActiveRecord
     public $descrval;
     public $commentval;
     public $gpsval;
-    
+//     public $searchmode;
+    public $searchByNumber;
     
     /**
      * @inheritdoc
@@ -65,9 +69,18 @@ class Sites extends \yii\db\ActiveRecord
             [['description', 'gpsval'], 'string'],
             [['opendate', 'closedate', 'inventdate'], 'safe'],
             [['nr'], 'string', 'max' => 32],
-            [['latrad', 'longrad'], 'safe'],
+            [['latrad', 'longrad', 'searchByNumber'], 'safe'],
         ];
     }
+
+//     /**
+//      * @inheritdoc
+//      */
+//     public function scenarios()
+//     {
+//         // bypass scenarios() implementation in the parent class
+//         return Model::scenarios();
+//     }
 
     /**
      * @inheritdoc
@@ -76,10 +89,11 @@ class Sites extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'typeid' => 'тип',
+            'sitetype' => 'тип сайта',
             'regionid' => 'регион',
             'nr' => '№',
             'oblid' => 'область',
+			'oblid2' => 'область',
             'rnid' => 'район',
             'typenpid' => 'тип НП',
             'npid' => 'НП',
@@ -102,9 +116,10 @@ class Sites extends \yii\db\ActiveRecord
             'gpsval' => 'координаты',
             'comment.value' => 'комментарий',
             'status' => 'статус',
-            'molname' => 'МОЛ',
+            'mol.molname' => 'МОЛ',
             'rel' => 'расположение',
             'mustangaddress' => 'адрес из Мустанга',
+			'searchByNumber' => 'поиск по номеру сайта',
         ];
     }
     
@@ -116,10 +131,10 @@ class Sites extends \yii\db\ActiveRecord
         return $this->hasOne(Sitestype::className(), ['id' => 'typeid']);
     }
     
-    public function getType()
-    {
-        return $this->sitestype->name;
-    }
+//     public function getType()
+//     {
+//         return $this->sitestype->name;
+//     }
     
     /**
      * @return \yii\db\ActiveQuery
@@ -129,14 +144,14 @@ class Sites extends \yii\db\ActiveRecord
         return $this->hasOne(Sitesregion::className(), ['id' => 'regionid']);
     }
     
-    public function getRegion()
-    {
-        return $this->sitesregion->name;
-    }
+//     public function getRegion()
+//     {
+//         return $this->sitesregion->name;
+//     }
     
     public function getSitename()
     {
-        return $this->type . ' ' . $this->region . $this->nr;
+        return $this->sitestype->name . ' ' . $this->sitesregion->name . $this->nr;
     }
     
     public function getObl() {
@@ -203,6 +218,7 @@ class Sites extends \yii\db\ActiveRecord
     }
     
     public function getFulladdress() {
+		$controllerID = Yii::$app->controller->id; //нужно для подгонки вида адреса под потребности страницы
 		$address = array();
 		if(isset($this->np->name) or isset($this->str->name)) {
 			if(isset($this->np->name)) {
@@ -217,7 +233,10 @@ class Sites extends \yii\db\ActiveRecord
 			}
 			if(isset($this->bud->value)) $address[2] = $this->bud->value;
 			if(isset($this->np->capital)) {
-				if(isset($this->rn->name) and $this->np->capital <> 2) $address[3] = $this->rn->name . ' р-н';
+				if(isset($this->rn->name) and $this->np->capital <> 2) {
+					if($controllerID == 'letters/letters') $address[3] = null;
+					else $address[3] = $this->rn->name . ' р-н';
+				}
 				if(isset($this->obl->name) and $this->np->capital <> 1) $address[4] = $this->obl->name . ' обл.';
 			} else {
 				if(isset($this->rn->name)) $address[3] = $this->rn->name . ' р-н';
@@ -236,9 +255,7 @@ class Sites extends \yii\db\ActiveRecord
     }
     
     public function getFullgps() {
-        if(isset($this->gps->lat)) 
-//         return $this->gps->lat / 1000000 . ' : ' . $this->gps->long / 1000000;
-        return $this->gps->lat / 1000000 . ' N, ' . $this->gps->long / 1000000 . ' E';
+        if(isset($this->gps->lat)) return $this->gps->lat / 1000000 . ' N, ' . $this->gps->long / 1000000 . ' E';
         else return NULL;
         
     }
@@ -251,22 +268,21 @@ class Sites extends \yii\db\ActiveRecord
     }
 
     public function getMol() {
-         return $this->hasOne(Users::className(), [ 'id' => 'molid' ]);
-    }
-    
-    public function getMolname() {
-        if(isset($this->mol->firstname)) return $this->mol->secondname->name . ' ' . $this->mol->firstname;
-        else return NULL;
+         return $this->hasOne(People::className(), [ 'id' => 'molid' ]);
     }
      
-    public function getObjects() {
-        return $this->hasMany(Sites::className(), ['objid' => 'objid'])
-                ->where('sites.id <> ' . $this->id);
+    public function getRelations() {
+// 	    print_r($this);
+// 	    print_r(Yii::$app->request);
+	    $url = Yii::$app->urlManager->parseRequest(Yii::$app->request);
+	    if ($url[0] == 'sites/view') return $this->hasMany(Sites::className(), ['objid' => 'objid'])
+	    ->where('sites.id <> ' . $this->id)->orderBy('typeid, nr');
+		else return $this->hasMany(Sites::className(), ['objid' => 'objid'])->orderBy('typeid, nr');
     }
     
     public function getRel() {
-        if($this->relationid == 2) return 'на одной площадке';
-        if($this->relationid == 3) return 'в другом помещении';
+        if($this->relationid == 2) return 'на площадке RBS';
+        if($this->relationid == 3) return 'на отдельной площадке';
     }
           
     public function getSimilarSites() {
@@ -278,7 +294,7 @@ class Sites extends \yii\db\ActiveRecord
 	$length = strlen($this->nr);
 // 	if ($length < 8) {
 	    $nr = null;
-	    if ($length > 4) $nr = substr($this->nr, $length - 4, 4) + 0;
+	    if ($length >= 4) $nr = substr($this->nr, $length - 4, 4) + 0;
 	    else $nr = $this->nr;
 // 	    if ($length == 3) $nr = $this->nr;
 // 
@@ -298,7 +314,7 @@ class Sites extends \yii\db\ActiveRecord
     public function getSearchOtherNr() {
         $nr = $this->searchNr;
         $length = strlen($nr);
-        if ($length > 7) return null; 
+        if ($length > 7 or $length < 3) return null; 
         $p3 = substr($nr, $length - 2, 2);
         $p2 = substr($nr, $length - 3, 1);
         if ($length == 4) $p1 = substr($nr, 0, 1);
@@ -320,4 +336,23 @@ class Sites extends \yii\db\ActiveRecord
 
     }
 
+    public function getContacts() {
+		return $this->hasMany(Contacts::className(), [ 'objid' => 'objid' ]);
+    }
+
+    public function getDiscrepancy() {
+// 		if($this->objid) return $this->hasMany(Discrepancy::className(), [ 'siteid' => 'id' ])
+// 									->viaTable('sites', ['objid' => 'objid']);
+//         else return $this->hasMany(Discrepancy::className(), [ 'siteid' => 'id' ]);
+		return $this->hasMany(Discrepancy::className(), [ 'siteid' => 'id' ])
+									->viaTable('sites', ['objid' => 'objid'])
+									->orderBy('siteid');
+		
+		
+// ->orOnCondition(['objid' => $this->objid]);
+    }
+
+    public function getObjectsites() {
+		return $this->hasMany(Sites::className(), [ 'objid' => 'objid' ]);
+    }
 }

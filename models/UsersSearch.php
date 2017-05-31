@@ -18,7 +18,7 @@ class UsersSearch extends Users
     public function rules()
     {
         return [
-            [['id', 'secondnameid', 'patronimicnameid', 'mobilephone', 'status'], 'integer'],
+            [['id', 'secondnameid', 'patronymicnameid', 'mobilephone', 'status'], 'integer'],
             [['username', 'firstname', 'auth_key', 'password_hash', 'password_reset_token', 'email', 'created_at', 'updated_at', 'lastlogin'], 'safe'],
         ];
     }
@@ -61,7 +61,7 @@ class UsersSearch extends Users
         $query->andFilterWhere([
             'id' => $this->id,
             'secondnameid' => $this->secondnameid,
-            'patronimicnameid' => $this->patronimicnameid,
+            'patronymicnameid' => $this->patronymicnameid,
             'mobilephone' => $this->mobilephone,
             'status' => $this->status,
             'created_at' => $this->created_at,

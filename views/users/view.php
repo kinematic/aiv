@@ -32,7 +32,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'username',
             'firstname',
             'secondnameid',
-            'patronimicnameid',
+            'patronymicnameid',
             'auth_key',
             'password_hash',
             'password_reset_token',

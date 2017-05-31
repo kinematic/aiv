@@ -23,7 +23,7 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'secondnameid') ?>
 
-    <?= $form->field($model, 'patronimicnameid') ?>
+    <?= $form->field($model, 'patronymicnameid') ?>
 
     <?php // echo $form->field($model, 'auth_key') ?>
 
