@@ -27,7 +27,7 @@ class m170623_124145_create_indexes extends Migration
     {
         echo "m170623_124145_create_indexes cannot be reverted.\n";
 
-        return false;
+        return true;
     }
 
     /*
