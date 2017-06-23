@@ -42,6 +42,7 @@ class m170509_070525_insert_letters extends Migration
             FROM rbs_sites.signature
             WHERE userid IS NOT NULL
 		');
+
     }
 
     public function down()

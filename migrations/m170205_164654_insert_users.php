@@ -163,6 +163,19 @@ class m170205_164654_insert_users extends Migration
 		$this->execute('
 			UPDATE users SET status = 5
 			WHERE id = 159');
+        		
+		 $this->execute('
+            INSERT INTO people_companies (
+				id,
+				simplename,
+				officialname
+			)
+            SELECT
+				id,
+                name,
+                title
+            FROM rbs_sites.companies
+		');
     }
 
     public function down()
@@ -175,6 +188,7 @@ class m170205_164654_insert_users extends Migration
 		$this->truncateTable('users');
 		$this->truncateTable('people_secondname');
 		$this->truncateTable('people_patronymicname');
+		$this->truncateTable('people_companies');
         return true;
     }
 

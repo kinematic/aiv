@@ -48,6 +48,7 @@ class People extends \yii\db\ActiveRecord
             'patronymicnameid' => 'отчество',
             'companyid' => 'компания',
             'positionid' => 'должность',
+            'fullname' => 'ФИО',
         ];
     }
 

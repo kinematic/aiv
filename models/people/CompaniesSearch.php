@@ -5,22 +5,21 @@ namespace app\models\people;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\people\People;
+use app\models\people\Companies;
 
 /**
- * PeopleSearch represents the model behind the search form about `app\models\people\People`.
+ * CompaniesSearch represents the model behind the search form about `app\models\people\Companies`.
  */
-class PeopleSearch extends People
+class CompaniesSearch extends Companies
 {
-    public $fullname;
     /**
      * @inheritdoc
      */
     public function rules()
     {
         return [
-            [['id', 'secondnameid', 'patronymicnameid', 'companyid', 'positionid'], 'integer'],
-            [['firstname', 'fullname'], 'safe'],
+            [['id'], 'integer'],
+            [['simplename', 'officialname'], 'safe'],
         ];
     }
 
@@ -42,7 +41,7 @@ class PeopleSearch extends People
      */
     public function search($params)
     {
-        $query = People::find()->innerJoinWith('secondname s');
+        $query = Companies::find();
 
         // add conditions that should always apply here
 
@@ -61,19 +60,11 @@ class PeopleSearch extends People
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'secondnameid' => $this->secondnameid,
-            'patronymicnameid' => $this->patronymicnameid,
-            'companyid' => $this->companyid,
-            'positionid' => $this->positionid,
         ]);
 
-        $query->andFilterWhere(['or',
-            ['like', 'firstname', $this->fullname],
-            ['like', 's.name', $this->fullname],
-        ]);
-        
-        $query->orderBy('firstname');
-
+        $query->andFilterWhere(['like', 'simplename', $this->simplename])
+            ->andFilterWhere(['like', 'officialname', $this->officialname]);
+        $query->orderBy('simplename');
         return $dataProvider;
     }
 }

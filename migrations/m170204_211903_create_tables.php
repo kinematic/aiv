@@ -6,76 +6,77 @@ class m170204_211903_create_tables extends Migration
 {
     public function up()
     {
+        $options = '';
+    
         $this->execute('
             CREATE TABLE `addresses` (
                 `id` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
                 `objid` int(11) NOT NULL,
                 `typeid` int(11) NOT NULL,
                 `valueid` int(11) NOT NULL
-            ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci');
+            )');
             
         $this->execute('
             CREATE TABLE `address_b` (
                 `id` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
                 `value` varchar(30) COLLATE utf8_unicode_ci NOT NULL
-            ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci');
+            )');
             
         $this->execute('
             CREATE TABLE `address_comment` (
                 `id` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
                 `value` text COLLATE utf8_unicode_ci NOT NULL
-            ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci');
+            )');
             
         $this->execute('
             CREATE TABLE `address_descr` (
                 `id` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
                 `value` varchar(255) COLLATE utf8_unicode_ci NOT NULL
-            ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci');
+            )');
             
         $this->execute('
             CREATE TABLE `address_np` (
                 `id` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
                 `name` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
                 `capital` smallint(6) DEFAULT NULL
-            ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci');
+            )');
             
         $this->execute('
             CREATE TABLE `address_obl` (
                 `id` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
                 `name` varchar(20) COLLATE utf8_unicode_ci NOT NULL
-            ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci');
+            )');
             
         $this->execute('
             CREATE TABLE `address_rn` (
                 `id` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
                 `name` varchar(30) COLLATE utf8_unicode_ci NOT NULL
-            ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci');
+            )');
             
         $this->execute('
             CREATE TABLE `address_str` (
                 `id` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
                 `name` varchar(30) COLLATE utf8_unicode_ci NOT NULL
-            ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci');
-            
-        $this->execute('
-            CREATE TABLE `address_typenp` (
-                `id` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
-                `name` varchar(10) COLLATE utf8_unicode_ci NOT NULL
-            ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci');
+            )');
+
+        $this->createTable('address_typenp', [
+            'id' => $this->primaryKey(),
+            'name' => $this->string(18)->notNull(),
+        ], $options);
             
         $this->execute('
             CREATE TABLE `address_typestr` (
                 `id` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
                 `name` varchar(10) COLLATE utf8_unicode_ci NOT NULL,
                 `position` smallint(6) DEFAULT NULL
-            ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci');
+            )');
             
         $this->execute('
             CREATE TABLE `address_gps` (
                 `id` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
                 `lat` int(11) DEFAULT NULL,
                 `long` int(11) DEFAULT NULL
-            ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci');
+            )');
             
         $this->execute('
             CREATE TABLE `sites` (
@@ -85,14 +86,14 @@ class m170204_211903_create_tables extends Migration
                 `nr` varchar(32) COLLATE utf8_unicode_ci NOT NULL,
                 `objid` int(11) DEFAULT NULL,
                 `relationid` smallint(6) DEFAULT NULL,
-				`mustangaddress` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+                `mustangaddress` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
                 `description` text COLLATE utf8_unicode_ci,
                 `statusid` int(11) DEFAULT NULL,
                 `opendate` date DEFAULT NULL,
                 `closedate` date DEFAULT NULL,
                 `molid` int(11) DEFAULT NULL,
                 `inventdate` date DEFAULT NULL
-            ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci');
+            )');
             
         $this->execute('
             CREATE TABLE `sitesregion` (
@@ -103,26 +104,26 @@ class m170204_211903_create_tables extends Migration
                 `oblid` smallint(6) DEFAULT NULL,
 				`visible` smallint(1) DEFAULT NULL,
                 `import` smallint(1) DEFAULT NULL
-            ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci');
+            )');
             
         $this->execute('
             CREATE TABLE `sitestype` (
                 `id` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
                 `name` varchar(11) COLLATE utf8_unicode_ci NOT NULL,
 				`visible` smallint(1) DEFAULT NULL
-            ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci');
+            )');
             
         $this->execute('
             CREATE TABLE `people_secondname` (
                 `id` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
                 `name` varchar(32) COLLATE utf8_unicode_ci NOT NULL
-            ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci');
+            )');
             
         $this->execute('
             CREATE TABLE `people_patronymicname` (
                 `id` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
                 `name` varchar(32) COLLATE utf8_unicode_ci NOT NULL
-            ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci');
+            )');
             
 //         $this->execute('
 //             CREATE TABLE `users` (
@@ -140,7 +141,7 @@ class m170204_211903_create_tables extends Migration
 //                 `created_at` date DEFAULT NULL,
 //                 `updated_at` date DEFAULT NULL,
 //                 `lastlogin` date DEFAULT NULL
-//             ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci');
+//             )');
 		
 		$this->createTable('users', [
             'id' => $this->primaryKey(),
@@ -154,7 +155,7 @@ class m170204_211903_create_tables extends Migration
             'auth_key' => $this->string(32)->defaultValue(null),
             'password_hash' => $this->string(255)->defaultValue(null),
             'password_reset_token' => $this->string(255)->defaultValue(null),
-        ]);
+        ], $options);
             
 		$this->createTable('people', [
             'id' => $this->primaryKey(),
@@ -163,18 +164,18 @@ class m170204_211903_create_tables extends Migration
 			'patronymicnameid' => $this->integer()->defaultValue(null),
 			'companyid' => $this->integer()->defaultValue(null),
 			'positionid' => $this->integer()->defaultValue(null),
-        ]);
+        ], $options);
         
         $this->createTable('people_position', [
             'id' => $this->primaryKey(),
             'name' => $this->string(50)->notNull(),
-        ]);
+        ], $options);
         
         $this->createTable('people_electrosafety', [
             'id' => $this->primaryKey(),
             'manid' => $this->integer()->notNull(),
             'groupid' => $this->integer()->notNull(),
-        ]);
+        ], $options);
                 
         $this->createTable('people_passport', [
             'id' => $this->primaryKey(),
@@ -185,14 +186,14 @@ class m170204_211903_create_tables extends Migration
             'placebirth' => $this->string(80)->defaultValue(null),
             'registration' => $this->string(80)->defaultValue(null),
             'residence' => $this->string(80)->defaultValue(null),
-        ]);
+        ], $options);
             
 		$this->createTable('contacts', [
             'id' => $this->primaryKey(),
 			'objid' => $this->integer()->notNull(),
             'contact' => $this->string(100)->notNull(),
             'description' => $this->string(250)->defaultValue(null),
-        ]);
+        ], $options);
 		
 		//таблица писем
 		$this->createTable('letters_letters', [
@@ -209,22 +210,22 @@ class m170204_211903_create_tables extends Migration
 			'text2' => $this->text()->defaultValue(null),
 // 			'delivery' => $this->text()->defaultValue(null),
 // 			'removal' => $this->text()->defaultValue(null),
-        ]);
+        ], $options);
 		
 // 		таблица подписей к письмам
 		$this->createTable('letters_signature', [
             'id' => $this->primaryKey(),
             'userid' => $this->integer()->notNull(),
-        ]);
+        ], $options);
 
-        $this->createTable('letters_companies', [
+        $this->createTable('people_companies', [
             'id' => $this->primaryKey(),
             'simplename' => $this->string(50)->defaultValue(null),
             'officialname' => $this->string(150)->defaultValue(null),
-        ]);
+        ], $options);
         
-        $this->createIndex('simplename', 'letters_companies', 'simplename', true);
-        $this->createIndex('officialname', 'letters_companies', 'officialname', true);
+//         $this->createIndex('simplename', 'letters_companies', 'simplename', true);
+//         $this->createIndex('officialname', 'letters_companies', 'officialname', true);
            
 //         $this->execute('
 //             ALTER TABLE `users`
@@ -266,11 +267,11 @@ class m170204_211903_create_tables extends Migration
         $this->dropTable('people');
         $this->dropTable('people_position');
         $this->dropTable('people_electrosafety');
-        $this->dropTable('people_passport');
-		$this->dropTable('contacts');
-		$this->dropTable('letters_letters');
-		$this->dropTable('letters_companies');
-		$this->dropTable('letters_signature');
+        $this->dropTable('people_pasport');
+        $this->dropTable('contacts');
+        $this->dropTable('letters_letters');
+        $this->dropTable('people_companies');
+        $this->dropTable('letters_signature');
         
         return true;
     }

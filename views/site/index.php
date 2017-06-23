@@ -23,6 +23,7 @@ $this->title = 'AIV2';
                 <p><a class="btn btn-default" href="index.php?r=people/secondname">Имена &raquo;</a></p>
                 <p><a class="btn btn-default" href="index.php?r=people/patronymicname">Отчества &raquo;</a></p>
 				<p><a class="btn btn-default" href="index.php?r=people/position">Должности &raquo;</a></p>
+				<p><a class="btn btn-default" href="index.php?r=people/companies">Компании &raquo;</a></p>
             </div>
             <div class="col-lg-4">
                 <h2>Объекты</h2>
