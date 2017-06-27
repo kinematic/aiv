@@ -97,23 +97,6 @@ class SitesSearch extends Sites
             //return $dataProvider;
         //}
 
-        // grid filtering conditions
-//         $query->andFilterWhere([
-//             'id' => $this->id,
-//             'typeid' => $this->typeid,
-//             'regionid' => $this->regionid,
-//             'objid' => $this->objid,
-//             'relationid' => $this->relationid,
-//             'statusid' => $this->statusid,
-//             'opendate' => $this->opendate,
-//             'closedate' => $this->closedate,
-//             'molid' => $this->molid,
-//             'inventdate' => $this->inventdate,
-//         ]);
-
-//         $query->andFilterWhere(['typeid' => $this->typeid])
-// 	    ->andFilterWhere(['regionid' => $this->regionid])
-	    
 	    $query->andFilterWhere(['like', 'description', $this->description]);
 	    
 	    if (strlen($this->searchNr) == 3) $query->andFilterWhere(
@@ -125,19 +108,13 @@ class SitesSearch extends Sites
 						['like', 'nr', '%0' . $this->searchOtherNr, false],
 					]
 				);
-		else $query->andFilterWhere(
+		elseif ($this->searchNr) $query->andFilterWhere(
 				[
 					'or', 
 					['like', 'nr', '%' . $this->nr, false],
 					['like', 'nr', '%' . $this->searchOtherNr, false],
 				]);
 		
-//         ;
-//         //$query->andWhere('sitestype.name LIKE "%' . $this->type . '%"');
-//         $query->joinWith(['sitestype' => function ($q) {
-//         $q->where('sitestype.name LIKE "%' . $this->type . '%"');
-//     }])
-//     ;
 		if($this->sitetype) {
 			$query->innerJoinWith(['sitestype']);
 			$query->andFilterWhere(['like', 'sitestype.name', $this->sitetype . '%', false]);
@@ -148,16 +125,16 @@ class SitesSearch extends Sites
 
 		}
 		if (isset($this->relation)) {
-// 			$query->innerJoinWith(['sitesregion']);
-// 			$query->andWhere(['sitesregion.oblid' => $this->oblid2]);
 			$query->andWhere('sites.id <> ' . $this->siteid);
 			$query->andWhere('LENGTH(nr) < IF(LENGTH(' . $this->nr . ') < 6, 8, 13)');
 			if ($this->relation == 'nonObject') $query->andWhere('objid IS NULL');
 			if ($this->relation == 'withObject') $query->andFilterWhere(['<>', 'objid', $this->objid])->andWhere('objid IS NOT NULL');
-			$query->orderBy('objid, typeid, nr');
-		} else $query->orderBy('typeid, regionid, nr');
-            
-
+			$query->orderBy('objid, typeid');
+		} elseif ($this->searchNr) $query->orderBy('typeid, regionid');
+        
+        
+        if ($this->searchNr) $query->addOrderBy('nr');
+        
         return $dataProvider;
     }
 }

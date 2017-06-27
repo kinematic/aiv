@@ -45,12 +45,7 @@ class m170206_133212_insert_sites extends Migration
         $this->execute('
             INSERT INTO sitesregion (id, name, shortname, description, oblid, visible, import)
             SELECT id, name, shortname, description, address_oblid, depvis, mustangimport  FROM rbs_sites.sitesregion');
-            
-        $this->execute('
-            ALTER TABLE `sites` ADD INDEX(`typeid`)');
-            
-        $this->execute('
-            ALTER TABLE `sites` ADD INDEX(`regionid`)');
+
     }
     
     public function down()

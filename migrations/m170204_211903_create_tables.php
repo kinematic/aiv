@@ -267,7 +267,7 @@ class m170204_211903_create_tables extends Migration
         $this->dropTable('people');
         $this->dropTable('people_position');
         $this->dropTable('people_electrosafety');
-        $this->dropTable('people_pasport');
+        $this->dropTable('people_passport');
         $this->dropTable('contacts');
         $this->dropTable('letters_letters');
         $this->dropTable('people_companies');

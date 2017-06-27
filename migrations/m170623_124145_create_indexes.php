@@ -26,7 +26,20 @@ class m170623_124145_create_indexes extends Migration
     public function down()
     {
         echo "m170623_124145_create_indexes cannot be reverted.\n";
-
+        
+        $this->dropIndex('typeid', 'sites');
+        $this->dropIndex('regionid', 'sites');
+        $this->dropIndex('nr', 'sites', 'nr');
+        $this->dropIndex('objid', 'sites');
+        
+        $this->dropIndex('name', 'sitestype');
+        
+        $this->dropIndex('oblid', 'sitesregion');
+        
+        $this->dropIndex('objid', 'addresses');
+        $this->dropIndex('typeid', 'addresses');
+        $this->dropIndex('valueid', 'addresses');
+        
         return true;
     }
 
