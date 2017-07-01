@@ -6,7 +6,7 @@ class m170204_211903_create_tables extends Migration
 {
     public function up()
     {
-        $options = '';
+        $options = 'CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE=InnoDB';
     
         $this->execute('
             CREATE TABLE `addresses` (
@@ -14,50 +14,50 @@ class m170204_211903_create_tables extends Migration
                 `objid` int(11) NOT NULL,
                 `typeid` int(11) NOT NULL,
                 `valueid` int(11) NOT NULL
-            )');
+            )' . $options);
             
         $this->execute('
             CREATE TABLE `address_b` (
                 `id` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
                 `value` varchar(30) COLLATE utf8_unicode_ci NOT NULL
-            )');
+            )' . $options);
             
         $this->execute('
             CREATE TABLE `address_comment` (
                 `id` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
                 `value` text COLLATE utf8_unicode_ci NOT NULL
-            )');
+            )' . $options);
             
         $this->execute('
             CREATE TABLE `address_descr` (
                 `id` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
                 `value` varchar(255) COLLATE utf8_unicode_ci NOT NULL
-            )');
+            )' . $options);
             
         $this->execute('
             CREATE TABLE `address_np` (
                 `id` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
                 `name` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
                 `capital` smallint(6) DEFAULT NULL
-            )');
+            )' . $options);
             
         $this->execute('
             CREATE TABLE `address_obl` (
                 `id` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
                 `name` varchar(20) COLLATE utf8_unicode_ci NOT NULL
-            )');
+            )' . $options);
             
         $this->execute('
             CREATE TABLE `address_rn` (
                 `id` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
                 `name` varchar(30) COLLATE utf8_unicode_ci NOT NULL
-            )');
+            )' . $options);
             
         $this->execute('
             CREATE TABLE `address_str` (
                 `id` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
                 `name` varchar(30) COLLATE utf8_unicode_ci NOT NULL
-            )');
+            )' . $options);
 
         $this->createTable('address_typenp', [
             'id' => $this->primaryKey(),
@@ -69,14 +69,14 @@ class m170204_211903_create_tables extends Migration
                 `id` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
                 `name` varchar(10) COLLATE utf8_unicode_ci NOT NULL,
                 `position` smallint(6) DEFAULT NULL
-            )');
+            )' . $options);
             
         $this->execute('
             CREATE TABLE `address_gps` (
                 `id` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
                 `lat` int(11) DEFAULT NULL,
                 `long` int(11) DEFAULT NULL
-            )');
+            )' . $options);
             
         $this->execute('
             CREATE TABLE `sites` (
@@ -93,7 +93,7 @@ class m170204_211903_create_tables extends Migration
                 `closedate` date DEFAULT NULL,
                 `molid` int(11) DEFAULT NULL,
                 `inventdate` date DEFAULT NULL
-            )');
+            )' . $options);
             
         $this->execute('
             CREATE TABLE `sitesregion` (
@@ -104,26 +104,26 @@ class m170204_211903_create_tables extends Migration
                 `oblid` smallint(6) DEFAULT NULL,
 				`visible` smallint(1) DEFAULT NULL,
                 `import` smallint(1) DEFAULT NULL
-            )');
+            )' . $options);
             
         $this->execute('
             CREATE TABLE `sitestype` (
                 `id` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
                 `name` varchar(11) COLLATE utf8_unicode_ci NOT NULL,
 				`visible` smallint(1) DEFAULT NULL
-            )');
+            )' . $options);
             
         $this->execute('
             CREATE TABLE `people_secondname` (
                 `id` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
                 `name` varchar(32) COLLATE utf8_unicode_ci NOT NULL
-            )');
+            )' . $options);
             
         $this->execute('
             CREATE TABLE `people_patronymicname` (
                 `id` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
                 `name` varchar(32) COLLATE utf8_unicode_ci NOT NULL
-            )');
+            )' . $options);
             
 //         $this->execute('
 //             CREATE TABLE `users` (

@@ -36,7 +36,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'partcount',
             'serialnumbers',
             'discrepancy',
-            'description',
+            'description:ntext',
         ],
     ]) ?>
 

@@ -116,6 +116,10 @@ class SitesSearch extends Sites
 				]);
 		
 		if($this->sitetype) {
+			$sitetype = Sitestype::find()->select('id')->where(['like', 'sitestype.name', $this->sitetype . '%', false])->asArray()->all();
+			// $sitestype = implode($sitetype[0]);
+			Yii::trace('типы сайтов: ' . print_r($sitetype[0], true));
+			// Yii::info('типы сайтов: ' . $sitetype);
 			$query->innerJoinWith(['sitestype']);
 			$query->andFilterWhere(['like', 'sitestype.name', $this->sitetype . '%', false]);
 		}
