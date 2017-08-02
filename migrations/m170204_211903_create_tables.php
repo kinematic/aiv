@@ -6,7 +6,7 @@ class m170204_211903_create_tables extends Migration
 {
     public function up()
     {
-        $options = 'CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE=InnoDB';
+        $options = 'CHARACTER SET utf8 COLLATE utf8mb4_general_ci ENGINE=InnoDB';
     
         $this->execute('
             CREATE TABLE `addresses` (
@@ -19,44 +19,44 @@ class m170204_211903_create_tables extends Migration
         $this->execute('
             CREATE TABLE `address_b` (
                 `id` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
-                `value` varchar(30) COLLATE utf8_unicode_ci NOT NULL
+                `value` varchar(30) COLLATE utf8mb4_general_ci NOT NULL
             )' . $options);
             
         $this->execute('
             CREATE TABLE `address_comment` (
                 `id` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
-                `value` text COLLATE utf8_unicode_ci NOT NULL
+                `value` text COLLATE utf8mb4_general_ci NOT NULL
             )' . $options);
             
         $this->execute('
             CREATE TABLE `address_descr` (
                 `id` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
-                `value` varchar(255) COLLATE utf8_unicode_ci NOT NULL
+                `value` varchar(255) COLLATE utf8mb4_general_ci NOT NULL
             )' . $options);
             
         $this->execute('
             CREATE TABLE `address_np` (
                 `id` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
-                `name` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
+                `name` varchar(30) COLLATE utf8mb4_general_ci NOT NULL,
                 `capital` smallint(6) DEFAULT NULL
             )' . $options);
             
         $this->execute('
             CREATE TABLE `address_obl` (
                 `id` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
-                `name` varchar(20) COLLATE utf8_unicode_ci NOT NULL
+                `name` varchar(20) COLLATE utf8mb4_general_ci NOT NULL
             )' . $options);
             
         $this->execute('
             CREATE TABLE `address_rn` (
                 `id` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
-                `name` varchar(30) COLLATE utf8_unicode_ci NOT NULL
+                `name` varchar(30) COLLATE utf8mb4_general_ci NOT NULL
             )' . $options);
             
         $this->execute('
             CREATE TABLE `address_str` (
                 `id` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
-                `name` varchar(30) COLLATE utf8_unicode_ci NOT NULL
+                `name` varchar(30) COLLATE utf8mb4_general_ci NOT NULL
             )' . $options);
 
         $this->createTable('address_typenp', [
@@ -67,7 +67,7 @@ class m170204_211903_create_tables extends Migration
         $this->execute('
             CREATE TABLE `address_typestr` (
                 `id` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
-                `name` varchar(10) COLLATE utf8_unicode_ci NOT NULL,
+                `name` varchar(10) COLLATE utf8mb4_general_ci NOT NULL,
                 `position` smallint(6) DEFAULT NULL
             )' . $options);
             
@@ -83,11 +83,11 @@ class m170204_211903_create_tables extends Migration
                 `id` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
                 `typeid` int(11) NOT NULL,
                 `regionid` int(11) NOT NULL,
-                `nr` varchar(32) COLLATE utf8_unicode_ci NOT NULL,
+                `nr` varchar(32) COLLATE utf8mb4_general_ci NOT NULL,
                 `objid` int(11) DEFAULT NULL,
                 `relationid` smallint(6) DEFAULT NULL,
-                `mustangaddress` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-                `description` text COLLATE utf8_unicode_ci,
+                `mustangaddress` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+                `description` text COLLATE utf8mb4_general_ci,
                 `statusid` int(11) DEFAULT NULL,
                 `opendate` date DEFAULT NULL,
                 `closedate` date DEFAULT NULL,
@@ -98,9 +98,9 @@ class m170204_211903_create_tables extends Migration
         $this->execute('
             CREATE TABLE `sitesregion` (
                 `id` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
-                `name` varchar(32) COLLATE utf8_unicode_ci NOT NULL,
-                `shortname` varchar(2) COLLATE utf8_unicode_ci DEFAULT NULL,
-                `description` varchar(30) COLLATE utf8_unicode_ci DEFAULT NULL,
+                `name` varchar(32) COLLATE utf8mb4_general_ci NOT NULL,
+                `shortname` varchar(2) COLLATE utf8mb4_general_ci DEFAULT NULL,
+                `description` varchar(30) COLLATE utf8mb4_general_ci DEFAULT NULL,
                 `oblid` smallint(6) DEFAULT NULL,
 				`visible` smallint(1) DEFAULT NULL,
                 `import` smallint(1) DEFAULT NULL
@@ -109,33 +109,33 @@ class m170204_211903_create_tables extends Migration
         $this->execute('
             CREATE TABLE `sitestype` (
                 `id` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
-                `name` varchar(11) COLLATE utf8_unicode_ci NOT NULL,
+                `name` varchar(11) COLLATE utf8mb4_general_ci NOT NULL,
 				`visible` smallint(1) DEFAULT NULL
             )' . $options);
             
         $this->execute('
             CREATE TABLE `people_secondname` (
                 `id` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
-                `name` varchar(32) COLLATE utf8_unicode_ci NOT NULL
+                `name` varchar(32) COLLATE utf8mb4_general_ci NOT NULL
             )' . $options);
             
         $this->execute('
             CREATE TABLE `people_patronymicname` (
                 `id` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
-                `name` varchar(32) COLLATE utf8_unicode_ci NOT NULL
+                `name` varchar(32) COLLATE utf8mb4_general_ci NOT NULL
             )' . $options);
             
 //         $this->execute('
 //             CREATE TABLE `users` (
 //                 `id` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
-//                 `username` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-//                 `firstname` varchar(32) COLLATE utf8_unicode_ci DEFAULT NULL,
+//                 `username` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+//                 `firstname` varchar(32) COLLATE utf8mb4_general_ci DEFAULT NULL,
 //                 `secondnameid` int(11) DEFAULT NULL,
 //                 `patronymicnameid` int(11) DEFAULT NULL,
-//                 `auth_key` varchar(32) COLLATE utf8_unicode_ci NOT NULL,
-//                 `password_hash` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-//                 `password_reset_token` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-//                 `email` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+//                 `auth_key` varchar(32) COLLATE utf8mb4_general_ci NOT NULL,
+//                 `password_hash` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+//                 `password_reset_token` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
+//                 `email` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
 //                 `mobilephone` int(11) DEFAULT NULL,
 //                 `status` int(11) DEFAULT NULL,
 //                 `created_at` date DEFAULT NULL,
