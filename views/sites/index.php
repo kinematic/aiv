@@ -2,11 +2,11 @@
 
 use yii\helpers\Html;
 use yii\helpers\Url;
-use yii\helpers\ArrayHelper;
+// use yii\helpers\ArrayHelper;
 use yii\grid\GridView;
-use app\models\Sitestype;
-use app\models\Sitesregion;
-use app\models\address\Obl;
+// use app\models\Sitestype;
+// use app\models\Sitesregion;
+// use app\models\address\Obl;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\SitesSearch */
@@ -25,38 +25,6 @@ $this->params['breadcrumbs'][] = $this->title;
 //         'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-//             [
-//                 'attribute' => 'sitetype',
-//                 'value' => 'sitestype.name',
-//                 'filter' => Html::activeDropDownList(
-//                     $searchModel, 
-//                     'sitetype', 
-//                     ArrayHelper::map(Sitestype::find()->select(['left(name, 3) AS sn', 'left(name, 3) AS sn2'])->asArray()->where(['visible' => 1])->groupBy('sn')->orderBy(['sn' => SORT_ASC])->all(), 
-//                     'sn',
-// 					'sn2'
-// 					),
-//                     [
-//                         'class'=>'form-control',
-//                         'prompt' => '',
-// //                         'options' => ['RBS' => ['selected' => 'selected']]
-//                     ]),
-//             ],
-//             [
-// 				'attribute' => 'oblid',
-// 				'value' => 'regionobl.name',
-// 				'filter' => Html::activeDropDownList(
-// 					$searchModel, 
-// 					'oblid', 
-// 					ArrayHelper::map(Obl::find()->asArray()->orderBy(['name' => SORT_ASC])->all(), 
-// 					'id', 
-// 					'name'),
-// 					[
-// 						'class'=>'form-control',
-// 						'prompt' => '',
-// // 						'options' => ['4' => ['selected' => 'selected']],
-// 					]
-// 				),
-//             ],
             [
                 'attribute' => 'nr',
                 'value' => function ($data) {
