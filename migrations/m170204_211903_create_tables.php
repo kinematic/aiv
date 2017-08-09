@@ -6,142 +6,110 @@ class m170204_211903_create_tables extends Migration
 {
     public function up()
     {
-        $options = 'CHARACTER SET utf8 COLLATE utf8mb4_general_ci ENGINE=InnoDB';
-    
-        $this->execute('
-            CREATE TABLE `addresses` (
-                `id` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
-                `objid` int(11) NOT NULL,
-                `typeid` int(11) NOT NULL,
-                `valueid` int(11) NOT NULL
-            )' . $options);
-            
-        $this->execute('
-            CREATE TABLE `address_b` (
-                `id` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
-                `value` varchar(30) COLLATE utf8mb4_general_ci NOT NULL
-            )' . $options);
-            
-        $this->execute('
-            CREATE TABLE `address_comment` (
-                `id` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
-                `value` text COLLATE utf8mb4_general_ci NOT NULL
-            )' . $options);
-            
-        $this->execute('
-            CREATE TABLE `address_descr` (
-                `id` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
-                `value` varchar(255) COLLATE utf8mb4_general_ci NOT NULL
-            )' . $options);
-            
-        $this->execute('
-            CREATE TABLE `address_np` (
-                `id` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
-                `name` varchar(30) COLLATE utf8mb4_general_ci NOT NULL,
-                `capital` smallint(6) DEFAULT NULL
-            )' . $options);
-            
-        $this->execute('
-            CREATE TABLE `address_obl` (
-                `id` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
-                `name` varchar(20) COLLATE utf8mb4_general_ci NOT NULL
-            )' . $options);
-            
-        $this->execute('
-            CREATE TABLE `address_rn` (
-                `id` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
-                `name` varchar(30) COLLATE utf8mb4_general_ci NOT NULL
-            )' . $options);
-            
-        $this->execute('
-            CREATE TABLE `address_str` (
-                `id` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
-                `name` varchar(30) COLLATE utf8mb4_general_ci NOT NULL
-            )' . $options);
-
+		if ($this->db->driverName === 'pgsql') $options = 'CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE=InnoDB';
+		else $options = null;
+		
+        $this->createTable('addresses', [
+            'id' => $this->primaryKey(),
+			'objid' => $this->integer()->notNull(),
+			'typeid' => $this->integer()->notNull(),
+			'valueid' => $this->integer()->notNull(),
+        ], $options);
+			        
+        $this->createTable('address_b', [
+            'id' => $this->primaryKey(),
+            'value' => $this->string(30)->notNull(),
+        ], $options);
+					        
+        $this->createTable('address_comment', [
+            'id' => $this->primaryKey(),
+            'value' => $this->text()->notNull(),
+        ], $options);
+						        
+        $this->createTable('address_descr', [
+            'id' => $this->primaryKey(),
+            'value' => $this->string(255)->notNull(),
+        ], $options);
+									        
+        $this->createTable('address_np', [
+            'id' => $this->primaryKey(),
+            'name' => $this->string(30)->notNull(),
+			'capital' => $this->integer()->defaultValue(null),
+        ], $options);
+									        
+        $this->createTable('address_obl', [
+            'id' => $this->primaryKey(),
+            'name' => $this->string(20)->notNull(),
+        ], $options);
+												        
+        $this->createTable('address_rn', [
+            'id' => $this->primaryKey(),
+            'name' => $this->string(30)->notNull(),
+        ], $options);
+															        
+        $this->createTable('address_str', [
+            'id' => $this->primaryKey(),
+            'name' => $this->string(30)->notNull(),
+        ], $options);
+																	        
         $this->createTable('address_typenp', [
             'id' => $this->primaryKey(),
             'name' => $this->string(18)->notNull(),
         ], $options);
-            
-        $this->execute('
-            CREATE TABLE `address_typestr` (
-                `id` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
-                `name` varchar(10) COLLATE utf8mb4_general_ci NOT NULL,
-                `position` smallint(6) DEFAULT NULL
-            )' . $options);
-            
-        $this->execute('
-            CREATE TABLE `address_gps` (
-                `id` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
-                `lat` int(11) DEFAULT NULL,
-                `long` int(11) DEFAULT NULL
-            )' . $options);
-            
-        $this->execute('
-            CREATE TABLE `sites` (
-                `id` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
-                `typeid` int(11) NOT NULL,
-                `regionid` int(11) NOT NULL,
-                `nr` varchar(32) COLLATE utf8mb4_general_ci NOT NULL,
-                `objid` int(11) DEFAULT NULL,
-                `relationid` smallint(6) DEFAULT NULL,
-                `mustangaddress` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
-                `description` text COLLATE utf8mb4_general_ci,
-                `statusid` int(11) DEFAULT NULL,
-                `opendate` date DEFAULT NULL,
-                `closedate` date DEFAULT NULL,
-                `molid` int(11) DEFAULT NULL,
-                `inventdate` date DEFAULT NULL
-            )' . $options);
-            
-        $this->execute('
-            CREATE TABLE `sitesregion` (
-                `id` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
-                `name` varchar(32) COLLATE utf8mb4_general_ci NOT NULL,
-                `shortname` varchar(2) COLLATE utf8mb4_general_ci DEFAULT NULL,
-                `description` varchar(30) COLLATE utf8mb4_general_ci DEFAULT NULL,
-                `oblid` smallint(6) DEFAULT NULL,
-				`visible` smallint(1) DEFAULT NULL,
-                `import` smallint(1) DEFAULT NULL
-            )' . $options);
-            
-        $this->execute('
-            CREATE TABLE `sitestype` (
-                `id` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
-                `name` varchar(11) COLLATE utf8mb4_general_ci NOT NULL,
-				`visible` smallint(1) DEFAULT NULL
-            )' . $options);
-            
-        $this->execute('
-            CREATE TABLE `people_secondname` (
-                `id` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
-                `name` varchar(32) COLLATE utf8mb4_general_ci NOT NULL
-            )' . $options);
-            
-        $this->execute('
-            CREATE TABLE `people_patronymicname` (
-                `id` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
-                `name` varchar(32) COLLATE utf8mb4_general_ci NOT NULL
-            )' . $options);
-            
-//         $this->execute('
-//             CREATE TABLE `users` (
-//                 `id` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
-//                 `username` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
-//                 `firstname` varchar(32) COLLATE utf8mb4_general_ci DEFAULT NULL,
-//                 `secondnameid` int(11) DEFAULT NULL,
-//                 `patronymicnameid` int(11) DEFAULT NULL,
-//                 `auth_key` varchar(32) COLLATE utf8mb4_general_ci NOT NULL,
-//                 `password_hash` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
-//                 `password_reset_token` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
-//                 `email` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
-//                 `mobilephone` int(11) DEFAULT NULL,
-//                 `status` int(11) DEFAULT NULL,
-//                 `created_at` date DEFAULT NULL,
-//                 `updated_at` date DEFAULT NULL,
-//                 `lastlogin` date DEFAULT NULL
-//             )');
+												        
+        $this->createTable('address_typestr', [
+            'id' => $this->primaryKey(),
+            'name' => $this->string(30)->notNull(),
+			'position' => $this->smallInteger()->defaultValue(null),
+        ], $options);
+															        
+        $this->createTable('address_gps', [
+            'id' => $this->primaryKey(),
+			'lat' => $this->integer()->defaultValue(null),
+			'long' => $this->integer()->defaultValue(null),
+        ], $options);
+											        
+        $this->createTable('sites', [
+            'id' => $this->primaryKey(),
+			'typeid' => $this->integer()->notNull(),
+			'regionid' => $this->integer()->notNull(),
+            'nr' => $this->string(32)->notNull(),
+			'objid' => $this->integer()->defaultValue(null),
+			'relationid' => $this->smallInteger()->defaultValue(null),
+			'mustangaddress' => $this->string(255)->defaultValue(null),
+			'description' => $this->text()->defaultValue(null),
+			'statusid' => $this->integer()->defaultValue(null),
+			'opendate' => $this->date()->defaultValue(null),
+			'closedate' => $this->date()->defaultValue(null),
+			'molid' => $this->integer()->defaultValue(null),
+			'inventdate' => $this->date()->defaultValue(null),
+        ], $options);
+														        
+        $this->createTable('sitesregion', [
+            'id' => $this->primaryKey(),
+            'name' => $this->string(32)->notNull(),
+			'shortname' => $this->string(2)->defaultValue(null),
+			'description' => $this->string(30)->defaultValue(null),
+			'oblid' => $this->smallInteger()->defaultValue(null),
+			'visible' => $this->smallInteger()->defaultValue(null),
+			'import' => $this->smallInteger()->defaultValue(null),
+        ], $options);
+														        
+        $this->createTable('sitestype', [
+            'id' => $this->primaryKey(),
+            'name' => $this->string(11)->notNull(),
+			'visible' => $this->smallInteger()->defaultValue(null),
+        ], $options);
+																			        
+        $this->createTable('people_secondname', [
+            'id' => $this->primaryKey(),
+            'name' => $this->string(32)->notNull(),
+        ], $options);
+																					        
+        $this->createTable('people_patronymicname', [
+            'id' => $this->primaryKey(),
+            'name' => $this->string(32)->notNull(),
+        ], $options);
 		
 		$this->createTable('users', [
             'id' => $this->primaryKey(),
