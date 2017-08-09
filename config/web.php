@@ -55,6 +55,7 @@ $config = [
 //             ],
 //         ],
         'db' => require(__DIR__ . '/db.php'),
+		'db2' => require(__DIR__ . '/db2.php'),
         /*
         'urlManager' => [
             'enablePrettyUrl' => true,
@@ -73,7 +74,7 @@ if (YII_ENV_DEV) {
     $config['modules']['debug'] = [
         'class' => 'yii\debug\Module',
         'traceLine' => '<a href="kate://open?url={file}&line={line}">{file}:{line}</a>',
-        'allowedIPs' => ['192.168.2.*', '10.10.0.*'],
+        'allowedIPs' => ['*'],
         'panels' => [
             'db' => [
                 'class' => 'yii\debug\panels\DbPanel',
@@ -90,7 +91,7 @@ if (YII_ENV_DEV) {
     $config['bootstrap'][] = 'gii';
     $config['modules']['gii'] = [
         'class' => 'yii\gii\Module',
-        'allowedIPs' => ['192.168.2.*', '10.10.0.*'],
+        'allowedIPs' => ['*'],
     ];
 }
 
