@@ -31,7 +31,8 @@ use app\models\inventory\Catalog;
 	
 	<?= $form->field($model, 'siteid')->hiddenInput()->label(false); ?>
 
-	<?= $form->field($model, 'catalogid')->dropDownList(ArrayHelper::map(Catalog::find()->orderBy('codename')->all(), 'id', 'codename'), ['prompt'=>'']) ?>
+	<?= $form->field($model, 'catalogid')->dropDownList(ArrayHelper::map(Catalog::find()->orderBy('codename')->all(), 'id', 'codename'), ['prompt'=>''])
+	->label('код товара ' . Html::a('<span class="glyphicon glyphicon-plus"></span>', ['inventory/catalog/create', 'Discrepancy[id]' => $model->id], ['title' => Yii::t('yii', 'добавить')])); ?>
 
 	<?php if(!$model->partcount) $model->partcount = 1?>
 	
