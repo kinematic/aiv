@@ -33,6 +33,7 @@ use app\models\inventory\Catalog;
 
 	<?= $form->field($model, 'catalogid')->dropDownList(ArrayHelper::map(Catalog::find()->orderBy('codename')->all(), 'id', 'codename'), ['prompt'=>'']) ?>
 
+	
 	<?php if(!$model->partcount) $model->partcount = 1?>
 	
 	<?= $form->field($model, 'partcount')->textInput() ?>
