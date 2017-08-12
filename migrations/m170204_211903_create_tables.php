@@ -6,7 +6,7 @@ class m170204_211903_create_tables extends Migration
 {
     public function up()
     {
-		if ($this->db->driverName === 'pgsql') $options = 'CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE=InnoDB';
+		if ($this->db->driverName == 'mysql') $options = 'CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE=InnoDB';
 		else $options = null;
 		
         $this->createTable('addresses', [
