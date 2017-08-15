@@ -8,6 +8,22 @@ class m170204_211903_create_tables extends Migration
     {
 		if ($this->db->driverName == 'mysql') $options = 'CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE=InnoDB';
 		else $options = null;
+
+		// удалить эту таблицу после импорта
+        $this->createTable('objects', [
+            'id' => $this->primaryKey(),
+			'address_b' => $this->string(30)->defaultValue(null),
+			'comment' => $this->text()->defaultValue(null),
+			'address_descr' => $this->string(255)->defaultValue(null),
+			'address_oblid' => $this->integer()->defaultValue(null),
+			'address_rnid' => $this->integer()->defaultValue(null),
+			'address_typenpid' => $this->integer()->defaultValue(null),
+			'address_npid' => $this->integer()->defaultValue(null),
+			'address_typestrid' => $this->integer()->defaultValue(null),
+			'address_strid' => $this->integer()->defaultValue(null),
+			'gpslat' => $this->integer()->defaultValue(null),
+			'gpslong' => $this->integer()->defaultValue(null),
+        ], $options);
 		
         $this->createTable('addresses', [
             'id' => $this->primaryKey(),
@@ -114,7 +130,7 @@ class m170204_211903_create_tables extends Migration
 		$this->createTable('users', [
             'id' => $this->primaryKey(),
 			'manid' => $this->integer()->notNull(),
-            'email' => $this->string(50)->notNull(),
+            'email' => $this->string(50)->defaultValue(null),
             'mobilephone' => $this->integer()->notNull(),
             'status' => $this->integer(1)->defaultValue(null),
             'created' => $this->date()->defaultValue(null),
@@ -128,10 +144,14 @@ class m170204_211903_create_tables extends Migration
 		$this->createTable('people', [
             'id' => $this->primaryKey(),
             'firstname' => $this->string(32)->notNull(),
-			'secondnameid' => $this->integer()->notNull(),
+			'secondnameid' => $this->integer()->defaultValue(null),
 			'patronymicnameid' => $this->integer()->defaultValue(null),
 			'companyid' => $this->integer()->defaultValue(null),
 			'positionid' => $this->integer()->defaultValue(null),
+		//удалить эти столбцы после импорта
+			'secondname' => $this->string(32)->notNull(),
+			'patronymicname' => $this->string(32)->notNull(),
+			'position' => $this->string(50)->defaultValue(null),
         ], $options);
         
         $this->createTable('people_position', [
@@ -192,6 +212,22 @@ class m170204_211903_create_tables extends Migration
             'officialname' => $this->string(150)->defaultValue(null),
         ], $options);
         
+        $this->createTable('inventory_catalog', [
+            'id' => $this->primaryKey(),
+            'codename' => $this->string(50)->notNull(),
+            'description' => $this->string(100)->defaultValue(null),
+        ]);
+                
+        $this->createTable('inventory_discrepancy', [
+            'id' => $this->primaryKey(),
+            'siteid' => $this->integer()->notNull(),
+            'catalogid' => $this->integer()->notNull(),
+            'partcount' => $this->integer()->notNull(),
+            'discrepancyid' => $this->integer()->notNull(),
+            'description' => $this->text()->defaultValue(null),
+            'serialnumbers' => $this->string(255)->defaultValue(null),
+        ]);
+        
 //         $this->createIndex('simplename', 'letters_companies', 'simplename', true);
 //         $this->createIndex('officialname', 'letters_companies', 'officialname', true);
            
@@ -214,7 +250,7 @@ class m170204_211903_create_tables extends Migration
     public function down()
     {
         echo "m170204_211903_create_tables cannot be reverted.\n";
-        
+        $this->dropTable('objects');
         $this->dropTable('addresses');
         $this->dropTable('address_b');
         $this->dropTable('address_comment');
@@ -243,15 +279,4 @@ class m170204_211903_create_tables extends Migration
         
         return true;
     }
-
-    /*
-    // Use safeUp/safeDown to run migration code within a transaction
-    public function safeUp()
-    {
-    }
-
-    public function safeDown()
-    {
-    }
-    */
 }
