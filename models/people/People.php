@@ -74,6 +74,8 @@ class People extends \yii\db\ActiveRecord
 	}
 	
     public function getMolname() {
-       return $this->secondname->name . ' ' . $this->firstname;
+       return $this->secondname . ' ' . $this->firstname;
+//         Yii::warning(print_r($this->secondname, true));
+//        return $this->firstname;
     }
 }
