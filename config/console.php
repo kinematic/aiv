@@ -2,7 +2,8 @@
 
 $params = require(__DIR__ . '/params.php');
 $db = require(__DIR__ . '/db.php');
-$db2 = require(__DIR__ . '/db2.php');
+$db2 = require(__DIR__ . '/db_local_postgres.php');
+$db3 = require(__DIR__ . '/db_remote_mysql.php');
 
 $config = [
     'id' => 'basic-console',
@@ -22,7 +23,7 @@ $config = [
             ],
         ],
         'db' => $db2,
-		'db2' => $db,
+	'db2' => $db3,
     ],
     'params' => $params,
 

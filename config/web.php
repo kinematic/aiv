@@ -54,8 +54,7 @@ $config = [
 //             // configure more hosts if you have a cluster
 //             ],
 //         ],
-        'db' => require(__DIR__ . '/db.php'),
-		'db2' => require(__DIR__ . '/db2.php'),
+        'db' => require(__DIR__ . '/db_local_postgres.php'),
         /*
         'urlManager' => [
             'enablePrettyUrl' => true,
