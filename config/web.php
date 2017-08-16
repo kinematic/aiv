@@ -55,6 +55,7 @@ $config = [
 //             ],
 //         ],
         'db' => require(__DIR__ . '/db_local_postgres.php'),
+
         /*
         'urlManager' => [
             'enablePrettyUrl' => true,
