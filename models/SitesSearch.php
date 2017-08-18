@@ -130,7 +130,8 @@ class SitesSearch extends Sites
 		}
 		if (isset($this->relation)) {
 			$query->andWhere('sites.id <> ' . $this->siteid);
-			$query->andWhere('LENGTH(nr) < IF(LENGTH(' . $this->nr . ') < 6, 8, 13)');
+			if ($this->db->driverName == 'mysql') $query->andWhere('LENGTH(nr) < IF(LENGTH(' . $this->nr . ') < 6, 8, 13)');
+			if ($this->db->driverName == 'pgsql') $query->andWhere('LENGTH(nr) < CASE WHEN '. $this->nr . ' < 6 THEN 8 ELSE 13 END');
 			if ($this->relation == 'nonObject') $query->andWhere('objid IS NULL');
 			if ($this->relation == 'withObject') $query->andFilterWhere(['<>', 'objid', $this->objid])->andWhere('objid IS NOT NULL');
 			$query->orderBy('objid, typeid');
