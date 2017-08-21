@@ -31,7 +31,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'value' => function ($data) {
 					if (isset($data->gps->lat))
 						return $data->fullgps . ' ' .
-						Html::a(Html::img('images/googleMaps.png', ['alt' => 'картинка', 'height' => '20', 'width' => '20']), 
+						Html::a(Html::img('images/googleMaps.png', ['alt' => 'карта', 'height' => '20', 'width' => '20']), 
 						Url::to('https://maps.google.com/maps?q=+' . $data->gps->lat / 1000000 . ',+' . $data->gps->long / 1000000 . '&hl=uk', true),
 						['target' => '_blank']);
                     else return null;
