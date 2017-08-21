@@ -24,8 +24,6 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
-            //'id',https://www.google.com.ua/maps?q=+50.345,+30.428333&hl=ru
-//             'fullgps',
             [
                 'attribute' => 'fullgps',
                 'value' => function ($data) {
