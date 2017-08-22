@@ -212,22 +212,23 @@ class m170204_211903_create_tables extends Migration
             'officialname' => $this->string(150)->defaultValue(null),
         ], $options);
         
-        $this->createTable('inventory_catalog', [
-            'id' => $this->primaryKey(),
-            'codename' => $this->string(50)->notNull(),
-            'description' => $this->string(100)->defaultValue(null),
-        ]);
+        // $this->createTable('inventory_catalog', [
+            // 'id' => $this->primaryKey(),
+            // 'codename' => $this->string(50)->notNull(),
+            // 'description' => $this->string(100)->defaultValue(null),
+        // ]);
                 
-        $this->createTable('inventory_discrepancy', [
-            'id' => $this->primaryKey(),
-            'siteid' => $this->integer()->notNull(),
-            'catalogid' => $this->integer()->notNull(),
-            'partcount' => $this->integer()->notNull(),
-            'discrepancyid' => $this->integer()->notNull(),
-            'description' => $this->text()->defaultValue(null),
-            'serialnumbers' => $this->string(255)->defaultValue(null),
-        ]);
+        // $this->createTable('inventory_discrepancy', [
+            // 'id' => $this->primaryKey(),
+            // 'siteid' => $this->integer()->notNull(),
+            // 'catalogid' => $this->integer()->notNull(),
+            // 'partcount' => $this->integer()->notNull(),
+            // 'discrepancyid' => $this->integer()->notNull(),
+            // 'description' => $this->text()->defaultValue(null),
+            // 'serialnumbers' => $this->string(255)->defaultValue(null),
+        // ]);
         
+		//наверно это нужно удалить
 //         $this->createIndex('simplename', 'letters_companies', 'simplename', true);
 //         $this->createIndex('officialname', 'letters_companies', 'officialname', true);
            
