@@ -2,6 +2,8 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
+use yii\helpers\ArrayHelper;
+use app\models\people\Companies;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\people\PeopleSearch */
@@ -23,12 +25,26 @@ $this->params['breadcrumbs'][] = $this->title;
         'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-
-//             'id',
-            'fullname',
-//             'secondname.name',
-//             'patronymicname.name',
-            'companyid',
+			'fullname',
+			[
+				'attribute' => 'company.simplename',                 
+				'value' => 'company.simplename',
+				'filter' => Html::activeDropDownList(
+					$searchModel,
+					'companyID',
+					ArrayHelper::map(Companies::find()->select(['id', 'simplename'])->asArray()->orderBy('simplename')->all(),
+					'id',
+					'simplename'
+					),
+					[
+						'class' => 'form-control',
+						'prompt' => '',
+					]
+				)
+			],
+            // 'sname.name',
+            // 'pname.name',
+			// 'company.simplename',
             // 'positionid',
 
             ['class' => 'yii\grid\ActionColumn'],

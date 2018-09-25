@@ -41,8 +41,14 @@ use app\models\inventory\Catalog;
 	
 	<?php if(!$model->discrepancyid) $model->discrepancyid = 1?>
 	
-	<?= $form->field($model, 'serialnumbers')->textInput() ?>
-
+	<div class="row">
+		<div class="col-xs-6">
+	<?= $form->field($model, 'swnumbers')->textInput() ?>
+		</div>
+		<div class="col-xs-6">
+	<?= $form->field($model, 'hwnumbers')->textInput() ?>
+		</div>
+	</div>
 	<?= $form->field($model, 'discrepancyid')->dropDownList(array (1 => 'недостача', 2 => 'излишек'), ['prompt'=>'']) ?>
 	
 	<?= $form->field($model, 'description')->textarea(['rows' => '6']) ?>

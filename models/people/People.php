@@ -3,6 +3,7 @@
 namespace app\models\people;
 
 use Yii;
+use app\models\address\Obl;
 
 /**
  * This is the model class for table "people".
@@ -16,6 +17,9 @@ use Yii;
  */
 class People extends \yii\db\ActiveRecord
 {
+	public $secondname;
+	public $patronymicname;
+	
     /**
      * @inheritdoc
      */
@@ -49,25 +53,27 @@ class People extends \yii\db\ActiveRecord
             'companyid' => 'компания',
             'positionid' => 'должность',
             'fullname' => 'ФИО',
+			'sname.name' => 'имя',
+			'pname.name' => 'отчество',
         ];
     }
 
-    public function getSecondname() {
+    public function getSname() {
          return $this->hasOne(Secondname::className(), [ 'id' => 'secondnameid' ]);
     }
 
-    public function getPatronymicname() {
+    public function getPname() {
          return $this->hasOne(Patronymicname::className(), [ 'id' => 'patronymicnameid' ]);
     }
 
 	public function getSignature() {
-		return mb_substr($this->secondname->name, 0, 1) . '.' . mb_substr($this->patronymicname->name, 0, 1) . '. ' . $this->firstname;
+		return mb_substr($this->sname->name, 0, 1) . '.' . mb_substr($this->pname->name, 0, 1) . '. ' . $this->firstname;
 	}
 
 	public function getFullname() {
-		if(isset($this->secondname->name)) $secondname = $this->secondname->name;
+		if(isset($this->sname->name)) $secondname = $this->sname->name;
 		else $secondname = null;
-		if(isset($this->patronymicname->name)) $patronymicname = $this->patronymicname->name;
+		if(isset($this->pname->name)) $patronymicname = $this->pname->name;
 		else $patronymicname = null;
 		return $this->firstname . ' ' . $secondname . ' ' . $patronymicname;
 
@@ -75,7 +81,13 @@ class People extends \yii\db\ActiveRecord
 	
     public function getMolname() {
        return $this->secondname . ' ' . $this->firstname;
-//         Yii::warning(print_r($this->secondname, true));
-//        return $this->firstname;
+    }
+	
+	public function getCompany() {
+         return $this->hasOne(Companies::className(), [ 'id' => 'companyid' ]);
+    }
+	
+	public function getDistrict() {
+         return $this->hasOne(Obl::className(), [ 'id' => 'address_oblid' ]);
     }
 }

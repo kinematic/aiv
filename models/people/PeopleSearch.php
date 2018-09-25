@@ -13,13 +13,14 @@ use app\models\people\People;
 class PeopleSearch extends People
 {
     public $fullname;
+	public $companyID;
     /**
      * @inheritdoc
      */
     public function rules()
     {
         return [
-            [['id', 'secondnameid', 'patronymicnameid', 'companyid', 'positionid'], 'integer'],
+            [['id', 'secondnameid', 'patronymicnameid', 'companyid', 'companyID', 'positionid'], 'integer'],
             [['firstname', 'fullname'], 'safe'],
         ];
     }
@@ -42,7 +43,8 @@ class PeopleSearch extends People
      */
     public function search($params)
     {
-        $query = People::find()->innerJoinWith('secondname s');
+        $query = People::find();
+		// $query = People::find()->innerJoinWith('people_secondname s');
 
         // add conditions that should always apply here
 
@@ -60,16 +62,16 @@ class PeopleSearch extends People
 
         // grid filtering conditions
         $query->andFilterWhere([
-            'id' => $this->id,
-            'secondnameid' => $this->secondnameid,
-            'patronymicnameid' => $this->patronymicnameid,
-            'companyid' => $this->companyid,
-            'positionid' => $this->positionid,
+            // 'id' => $this->id,
+            // 'secondnameid' => $this->secondnameid,
+            // 'patronymicnameid' => $this->patronymicnameid,
+            'companyid' => $this->companyID,
+            // 'positionid' => $this->positionid,
         ]);
 
         $query->andFilterWhere(['or',
             ['like', 'firstname', $this->fullname],
-            ['like', 's.name', $this->fullname],
+            // ['like', 's.name', $this->fullname],
         ]);
         
         $query->orderBy('firstname');

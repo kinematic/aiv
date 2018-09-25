@@ -7,7 +7,7 @@ use yii\grid\GridView;
 /* @var $searchModel app\models\people\SecondnameSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Secondnames';
+$this->title = 'Имена';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="secondname-index">
@@ -16,15 +16,14 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a('Create Secondname', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Добавить', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-
-            'id',
+            // 'id',
             'name',
 
             ['class' => 'yii\grid\ActionColumn'],

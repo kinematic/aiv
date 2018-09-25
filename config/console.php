@@ -5,6 +5,7 @@ $db = require(__DIR__ . '/db.php');
 $db_local_postgres = require(__DIR__ . '/db_local_postgres.php');
 $db_remote_mysql = require(__DIR__ . '/db_remote_mysql.php');
 $db_remote_mysql_aiv = require(__DIR__ . '/db_remote_mysql_aiv.php');
+$db_remote_oracle = require(__DIR__ . '/db_remote_oracle.php');
 
 $config = [
     'id' => 'basic-console',
@@ -24,8 +25,9 @@ $config = [
             ],
         ],
         'db' => $db_local_postgres,
-	'db2' => $db_remote_mysql,
-	'db_remote_mysql_aiv' => $db_remote_mysql_aiv,
+		'db2' => $db_remote_mysql,
+		'db_remote_mysql_aiv' => $db_remote_mysql_aiv,
+		'db_remote_oracle' => $db_remote_oracle,
     ],
     'params' => $params,
 

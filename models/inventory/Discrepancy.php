@@ -14,7 +14,8 @@ use app\models\Sites;
  * @property integer $partcount
  * @property integer $discrepancyid
  * @property integer $description
- * @property integer $serialnumbers
+ * @property integer $swnumbers
+ * @property integer $hwnumbers
  */
 class Discrepancy extends \yii\db\ActiveRecord
 {
@@ -34,7 +35,7 @@ class Discrepancy extends \yii\db\ActiveRecord
         return [
             [['siteid', 'catalogid', 'discrepancyid', 'partcount'], 'required', 'message' => 'поле не должно быть пустым'],
             [['siteid', 'catalogid', 'discrepancyid', 'partcount'], 'integer'],
-            [['description', 'serialnumbers'], 'string'],
+            [['description', 'swnumbers', 'hwnumbers'], 'string'],
         ];
     }
 
@@ -52,7 +53,8 @@ class Discrepancy extends \yii\db\ActiveRecord
             'discrepancyid' => 'расхождение',
             'discrepancy' => 'расхождение',
             'description' => 'описание',
-            'serialnumbers' => 'серийные номера',
+            'swnumbers' => 'серийные номера ИС',
+			'hwnumbers' => 'серийные номера оборудования',
         ];
     }
 

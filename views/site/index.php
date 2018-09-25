@@ -18,7 +18,7 @@ $this->title = 'AIV2';
             <div class="col-lg-4">
                 <h2>Люди</h2>
 
-                <p><a class="btn btn-default" href="index.php?r=users">Пользователи &raquo;</a></p>
+                <p><a class="btn btn-default" href="index.php?r=people/users">Пользователи &raquo;</a></p>
 				<p><a class="btn btn-default" href="index.php?r=people/people">Люди &raquo;</a></p>
                 <p><a class="btn btn-default" href="index.php?r=people/secondname">Имена &raquo;</a></p>
                 <p><a class="btn btn-default" href="index.php?r=people/patronymicname">Отчества &raquo;</a></p>
@@ -28,9 +28,9 @@ $this->title = 'AIV2';
             <div class="col-lg-4">
                 <h2>Объекты</h2>
 
-                <p><a class="btn btn-default" href="index.php?r=sites">Сайты &raquo;</a></p>
-                <p><a class="btn btn-default" href="index.php?r=sitestype">Типы сайтов &raquo;</a></p>
-                <p><a class="btn btn-default" href="index.php?r=sitesregion">Регионы сайтов &raquo;</a></p>
+                <p><a class="btn btn-default" href="index.php?r=sites/sites">Сайты &raquo;</a></p>
+                <p><a class="btn btn-default" href="index.php?r=sites/sitestype">Типы сайтов &raquo;</a></p>
+                <p><a class="btn btn-default" href="index.php?r=sites/sitesregion">Регионы сайтов &raquo;</a></p>
             </div>
             <div class="col-lg-4">
                 <h2>Адреса</h2>

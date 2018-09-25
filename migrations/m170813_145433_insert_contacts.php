@@ -13,6 +13,7 @@ class m170813_145433_insert_contacts extends Migration
                 phone,
                 rank
             FROM phones
+			WHERE phone IS NOT NULL
         ');
         $users = $model->queryAll();
         

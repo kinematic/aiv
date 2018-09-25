@@ -14,6 +14,9 @@ class m170812_194754_insert_people_electrosafety extends Migration
                     WHEN 'III' THEN 3
                     WHEN 'IV' THEN 4
                     WHEN 'V' THEN 5
+					WHEN 3 THEN 3
+                    WHEN 4 THEN 4
+                    WHEN 5 THEN 5
                 END AS groupid
             FROM user
 			WHERE el_bez IS NOT NULL
