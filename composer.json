@@ -22,7 +22,8 @@
         "kartik-v/yii2-widget-select2": "@dev",
         "2amigos/yii2-selectize-widget": "~1.0",
         "yii2mod/yii2-selectize": "*",
-        "kartik-v/yii2-widgets": "^3.4"
+        "kartik-v/yii2-widgets": "^3.4",
+        "yiisoft/yii2-jui": "^2.0"
     },
     "require-dev": {
         "yiisoft/yii2-gii": "~2.0.0",
@@ -33,7 +34,13 @@
         "codeception/specify": "~0.4.3"
     },
     "config": {
-        "process-timeout": 1800
+        "process-timeout": 1800,
+		"fxp-asset": {
+            "installer-paths": {
+                "npm-asset-library": "vendor/npm",
+                "bower-asset-library": "vendor/bower"
+            }
+        }
     },
     "scripts": {
         "post-create-project-cmd": [
@@ -52,10 +59,6 @@
             "generateCookieValidationKey": [
                 "config/web.php"
             ]
-        },
-        "asset-installer-paths": {
-            "npm-asset-library": "vendor/npm",
-            "bower-asset-library": "vendor/bower"
         }
     }
 }

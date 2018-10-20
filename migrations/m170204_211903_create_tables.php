@@ -146,6 +146,7 @@ class m170204_211903_create_tables extends Migration
             'firstname' => $this->string(32)->notNull(),
 			'secondnameid' => $this->integer()->defaultValue(null),
 			'patronymicnameid' => $this->integer()->defaultValue(null),
+			'districtid' => $this->integer()->defaultValue(null),
 			'companyid' => $this->integer()->defaultValue(null),
 			'positionid' => $this->integer()->defaultValue(null),
 		//удалить эти столбцы после импорта

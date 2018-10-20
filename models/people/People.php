@@ -51,10 +51,19 @@ class People extends \yii\db\ActiveRecord
             'secondnameid' => 'имя',
             'patronymicnameid' => 'отчество',
             'companyid' => 'компания',
+			'company.simplename' => 'компания',
             'positionid' => 'должность',
+			'position.name' => 'должность',
             'fullname' => 'ФИО',
 			'sname.name' => 'имя',
 			'pname.name' => 'отчество',
+			'electrosafetygroup' => 'группа электробезопасности',
+			'passport.number' => 'серия и номер паспорта',
+			'passport.issued' => 'паспорт выдан',
+			'passport.birthday' => 'дата рождения',
+			'passport.placebirth' => 'место рождения',
+			'passport.registration' => 'прописка',
+			'passport.residence' => 'место проживания',
         ];
     }
 
@@ -76,7 +85,6 @@ class People extends \yii\db\ActiveRecord
 		if(isset($this->pname->name)) $patronymicname = $this->pname->name;
 		else $patronymicname = null;
 		return $this->firstname . ' ' . $secondname . ' ' . $patronymicname;
-
 	}
 	
     public function getMolname() {
@@ -89,5 +97,24 @@ class People extends \yii\db\ActiveRecord
 	
 	public function getDistrict() {
          return $this->hasOne(Obl::className(), [ 'id' => 'address_oblid' ]);
+    }
+	
+	public function getPosition() {
+         return $this->hasOne(Position::className(), [ 'id' => 'positionid' ]);
+    }
+	
+	public function getElectrosafety() {
+         return $this->hasOne(Electrosafety::className(), [ 'manid' => 'id' ]);
+    }
+	
+	public function getElectrosafetygroup() {
+		if(!isset($this->electrosafety->groupid)) return null;
+		if($this->electrosafety->groupid == 3) return 'III';
+		if($this->electrosafety->groupid == 4) return 'IV';
+		if($this->electrosafety->groupid == 5) return 'V';
+	}
+	
+	public function getPassport() {
+         return $this->hasOne(Passport::className(), [ 'manid' => 'id' ]);
     }
 }

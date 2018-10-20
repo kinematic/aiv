@@ -15,6 +15,7 @@ class m170812_123002_insert_people_table extends Migration
                 imya as secondname,
                 otch as patronymicname,
                 rank as position,
+				address_oblid,
                 comp_id 
             FROM user
         ');
@@ -28,6 +29,7 @@ class m170812_123002_insert_people_table extends Migration
                     'secondname' => $user['secondname'],
                     'patronymicname' => $user['patronymicname'],
                     'position' => $user['position'],
+					'districtid' => $user['address_oblid'],
                     'companyid' => $user['comp_id'],
                 ]
             );

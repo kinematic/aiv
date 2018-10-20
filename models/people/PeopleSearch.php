@@ -22,6 +22,7 @@ class PeopleSearch extends People
         return [
             [['id', 'secondnameid', 'patronymicnameid', 'companyid', 'companyID', 'positionid'], 'integer'],
             [['firstname', 'fullname'], 'safe'],
+			[['firstname', 'fullname'], 'trim'],
         ];
     }
 
@@ -61,7 +62,7 @@ class PeopleSearch extends People
         }
 
         // grid filtering conditions
-        $query->andFilterWhere([
+        $query->filterWhere([
             // 'id' => $this->id,
             // 'secondnameid' => $this->secondnameid,
             // 'patronymicnameid' => $this->patronymicnameid,
