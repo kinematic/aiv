@@ -131,7 +131,7 @@ class m170204_211903_create_tables extends Migration
             'id' => $this->primaryKey(),
 			'manid' => $this->integer()->notNull(),
             'email' => $this->string(50)->defaultValue(null),
-            'mobilephone' => $this->integer()->notNull(),
+            'mobilephone' => $this->integer()->defaultValue(null),
             'status' => $this->integer(1)->defaultValue(null),
             'created' => $this->date()->defaultValue(null),
             'updated' => $this->date()->defaultValue(null),
