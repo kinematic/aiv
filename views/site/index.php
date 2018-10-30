@@ -51,6 +51,12 @@ $this->title = 'AIV2';
                 <p><a class="btn btn-default" href="index.php?r=inventory/catalog">Справочник оборудования &raquo;</a></p>
                 <p><a class="btn btn-default" href="index.php?r=inventory/discrepancy">Расхождения &raquo;</a></p>
             </div>
+            <div class="col-lg-4">
+                <h2>Письма</h2>
+
+                <p><a class="btn btn-default" href="index.php?r=letters/letters">на проход &raquo;</a></p>
+                <p><a class="btn btn-default" href="index.php?r=letters/signature">Подписи &raquo;</a></p>
+            </div>
         </div>
 
 

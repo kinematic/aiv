@@ -106,7 +106,7 @@ class Sites extends \yii\db\ActiveRecord
             'descrval' => 'расположение',
             'commentval' => 'комментарий',
             'objid' => 'Objid',
-            'relationid' => 'Relationid',
+            'relationid' => 'совмещение',
             'description' => 'Описание',
             'statusid' => 'статус',
             'opendate' => 'дата открытия',

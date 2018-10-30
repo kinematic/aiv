@@ -13,8 +13,7 @@ $this->params['breadcrumbs'][] = 'Редактирование';
 <div class="sites-update">
 
     <h1><?= Html::encode($this->title) ?></h1>
-	<p><b>адрес из Мустанга:</b> <?= $model->mustangaddress?></p>
-	<p><b>старое описание:</b> <?= $model->description?></p>
+
     <?= 
     $this->render('_form', [
         'model' => $model,

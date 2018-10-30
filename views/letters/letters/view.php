@@ -36,7 +36,7 @@ $this->params['breadcrumbs'][] = ['label' => $model->site->sitename, 'url' => ['
 	    <?= nl2br($model->signature->position) ?>
 	</div>
 	<div style="width:30%; margin-left:70%">
-	    <?= nl2br($model->signature->user->signature) ?>
+	    <?= nl2br($model->signature->chief->signature) ?>
 	</div>
 
 </div>

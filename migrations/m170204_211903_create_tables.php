@@ -188,13 +188,14 @@ class m170204_211903_create_tables extends Migration
 		$this->createTable('letters_letters', [
             'id' => $this->primaryKey(),
 			'objid' => $this->integer()->notNull(),
-            'appeal1' => $this->string(150)->defaultValue(null),
+            'appeal1' => $this->string(200)->defaultValue(null),
 			'appeal2' => $this->string(50)->defaultValue(null),
 			'appeal3' => $this->string(50)->defaultValue(null),
 			'firstname' => $this->string(50)->defaultValue(null),
 			'secondnameid' => $this->integer()->defaultValue(null),
 			'patronymicnameid' => $this->integer()->defaultValue(null),
 			'signid' => $this->integer()->defaultValue(null),
+			'typeid' => $this->integer()->defaultValue(null),
             'text1' => $this->text()->defaultValue(null),
 			'text2' => $this->text()->defaultValue(null),
 // 			'delivery' => $this->text()->defaultValue(null),
@@ -205,6 +206,7 @@ class m170204_211903_create_tables extends Migration
 		$this->createTable('letters_signature', [
             'id' => $this->primaryKey(),
             'userid' => $this->integer()->notNull(),
+            'position' => $this->string(50)->notNull(),
         ], $options);
 
         $this->createTable('people_companies', [

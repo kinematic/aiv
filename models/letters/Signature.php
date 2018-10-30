@@ -3,7 +3,7 @@
 namespace app\models\letters;
 
 use Yii;
-use app\models\Users;
+use app\models\people\People;
 
 /**
  * This is the model class for table "letters_signature".
@@ -46,8 +46,8 @@ class Signature extends \yii\db\ActiveRecord
         ];
     }
 
-    public function getUser() {
-         return $this->hasOne(Users::className(), [ 'id' => 'userid' ]);
+    public function getChief() {
+         return $this->hasOne(People::className(), [ 'id' => 'userid' ]);
     }
 
 // 	public function getSignature() {
