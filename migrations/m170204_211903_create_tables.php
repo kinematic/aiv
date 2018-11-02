@@ -209,6 +209,13 @@ class m170204_211903_create_tables extends Migration
             'position' => $this->string(50)->notNull(),
         ], $options);
 
+// 		таблица списков работников к письмам
+		$this->createTable('letters_lists', [
+            'id' => $this->primaryKey(),
+            'letterid' => $this->integer()->notNull(),
+            'manid' => $this->integer()->notNull(),
+        ], $options);
+
         $this->createTable('people_companies', [
             'id' => $this->primaryKey(),
             'simplename' => $this->string(50)->defaultValue(null),
@@ -280,6 +287,7 @@ class m170204_211903_create_tables extends Migration
         $this->dropTable('letters_letters');
         $this->dropTable('people_companies');
         $this->dropTable('letters_signature');
+		$this->dropTable('letters_lists');
         
         return true;
     }

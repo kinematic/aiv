@@ -85,6 +85,14 @@ class Letters extends \yii\db\ActiveRecord
         return $this->hasMany(Sites::className(), ['objid' => 'objid']);
     }
 
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getList()
+    {
+        return $this->hasMany(Lists::className(), ['letterid' => 'id']);
+    }
+
     public function getSignature() {
          return $this->hasOne(Signature::className(), [ 'id' => 'signid' ]);
     }

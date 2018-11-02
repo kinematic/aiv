@@ -3,19 +3,19 @@
 namespace app\controllers\letters;
 
 use Yii;
-use app\models\letters\Letters;
-use app\models\letters\LettersSearch;
+use app\models\letters\Lists;
+use app\models\letters\ListsSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * LettersController implements the CRUD actions for Letters model.
+ * ListssController implements the CRUD actions for Lists model.
  */
-class LettersController extends Controller
+class ListsController extends Controller
 {
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function behaviors()
     {
@@ -30,12 +30,12 @@ class LettersController extends Controller
     }
 
     /**
-     * Lists all Letters models.
+     * Lists all Lists models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $searchModel = new LettersSearch();
+        $searchModel = new ListsSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -45,9 +45,10 @@ class LettersController extends Controller
     }
 
     /**
-     * Displays a single Letters model.
+     * Displays a single Lists model.
      * @param integer $id
      * @return mixed
+     * @throws NotFoundHttpException if the model cannot be found
      */
     public function actionView($id)
     {
@@ -57,41 +58,29 @@ class LettersController extends Controller
     }
 
     /**
-     * Displays a single Letters model.
-     * @param integer $id
-     * @return mixed
-     */
-    public function actionViewbyobjid($objid)
-    {
-		$model = Letters::findOne(['objid' => $objid]);
-        return $this->render('view', [
-            'model' => $model,
-        ]);
-    }
-
-    /**
-     * Creates a new Letters model.
+     * Creates a new Lists model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new Letters();
+        $model = new Lists();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
-        } else {
-            return $this->render('create', [
-                'model' => $model,
-            ]);
         }
+
+        return $this->render('create', [
+            'model' => $model,
+        ]);
     }
 
     /**
-     * Updates an existing Letters model.
+     * Updates an existing Lists model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
+     * @throws NotFoundHttpException if the model cannot be found
      */
     public function actionUpdate($id)
     {
@@ -99,18 +88,19 @@ class LettersController extends Controller
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
-        } else {
-            return $this->render('update', [
-                'model' => $model,
-            ]);
         }
+
+        return $this->render('update', [
+            'model' => $model,
+        ]);
     }
 
     /**
-     * Deletes an existing Letters model.
+     * Deletes an existing Lists model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
+     * @throws NotFoundHttpException if the model cannot be found
      */
     public function actionDelete($id)
     {
@@ -120,19 +110,18 @@ class LettersController extends Controller
     }
 
     /**
-     * Finds the Letters model based on its primary key value.
+     * Finds the Lists model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return Letters the loaded model
+     * @return Lists the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Letters::findOne($id)) !== null) {
+        if (($model = Lists::findOne($id)) !== null) {
             return $model;
-        } else {
-            throw new NotFoundHttpException('The requested page does not exist.');
         }
-    }
 
+        throw new NotFoundHttpException('The requested page does not exist.');
+    }
 }
