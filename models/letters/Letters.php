@@ -70,10 +70,6 @@ class Letters extends \yii\db\ActiveRecord
     public function getSite()
     {
 		return Sites::find()->where(['objid' => $this->objid])->orderBy('LENGTH(nr) ASC')->limit(1)->one();
-// 		print_r($tmp);
-// 		die();
-// 		return $tmp->sitename;
-		
     }
 
     

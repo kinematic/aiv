@@ -58,8 +58,8 @@ use yii\data\ArrayDataProvider;
 				'caption' => '<h3 style="display:inline">Работники</h3>' . ' ' . 
 					Html::a(
 					'<span class="glyphicon glyphicon-plus"></span>', 
-					['cars/charges/create', 'Charges[road_id]' => $model->id], 
-					['title' => Yii::t('yii', 'добавить'), 'name' => 'charges']),
+					['letters/lists/update', 'id' => $model->id], 
+					['title' => Yii::t('yii', 'добавить'), 'name' => 'lists']),
 				'beforeRow' => function ($model, $key, $index, $grid) use (&$currentCompanyID)
 				{
 					if($model->man->companyid != $currentCompanyID) {
