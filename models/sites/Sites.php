@@ -220,8 +220,11 @@ class Sites extends \yii\db\ActiveRecord
         });
     }
     
-    public function getFulladdress() {
+    public function getFulladdress_() {
 		$controllerID = Yii::$app->controller->id; //нужно для подгонки вида адреса под потребности страницы
+		print $controllerID;
+// 		die();
+		Yii::warning($controllerID);
 		$address = array();
 		if(isset($this->np->name) or isset($this->str->name)) {
 			if(isset($this->np->name)) {
@@ -246,7 +249,7 @@ class Sites extends \yii\db\ActiveRecord
 				if(isset($this->obl->name)) $address[4] = $this->obl->name . ' обл.';
 			}
 			if(isset($this->descr->value)) $address[5] = $this->descr->value;
-			return implode(', ', $address);
+			return implode(',ррр ', $address);
         } else return $this->mustangaddress;
     }
     

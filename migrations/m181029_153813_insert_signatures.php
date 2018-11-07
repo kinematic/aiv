@@ -14,6 +14,7 @@ class m181029_153813_insert_signatures extends Migration
         $connection = \Yii::$app->db2;
         $model = $connection->createCommand('
             SELECT
+				id,
 				userid,
 				rank
 			FROM signature
@@ -23,6 +24,7 @@ class m181029_153813_insert_signatures extends Migration
         foreach($codes as $code) {
             $this->insert('letters_signature',
                 [
+					'id' => $code['id'],
 					'userid' => $code['userid'],
 					'position' => $code['rank']
                 ]

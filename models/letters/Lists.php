@@ -41,8 +41,8 @@ class Lists extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'letterid' => 'Letterid',
-            'manid' => 'Manid',
+            'letterid' => 'письмо',
+            'manid' => 'человек',
         ];
     }
 

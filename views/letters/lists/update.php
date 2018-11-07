@@ -5,10 +5,10 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\models\letters\Lists */
 
-$this->title = 'Update Lists: ' . $model->id;
+$this->title = 'Редактирование: ' . $model->id;
 $this->params['breadcrumbs'][] = ['label' => 'Lists', 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
-$this->params['breadcrumbs'][] = 'Update';
+$this->params['breadcrumbs'][] = 'Редактирование';
 ?>
 <div class="lists-update">
 
@@ -16,6 +16,7 @@ $this->params['breadcrumbs'][] = 'Update';
 
     <?= $this->render('_form', [
         'model' => $model,
+		'people' => $people,
     ]) ?>
 
 </div>

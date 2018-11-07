@@ -30,7 +30,9 @@ use yii\data\ArrayDataProvider;
 		</div>
 	</div>
     <?= $form->field($model, 'text1')->textarea(['rows' => 3]) ?>
-
+	<div class="row">
+		<?=$model->site->fulladdress ?>
+	</div>
     <?= $form->field($model, 'text2')->textarea(['rows' => 3]) ?>
 	<div class='row'>
 		<div class='col-md-6'>
