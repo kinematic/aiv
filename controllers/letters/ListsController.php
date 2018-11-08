@@ -86,15 +86,13 @@ class ListsController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-		$people = People::find()->orderBy('firstname')->all() ;
-
+		
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
         return $this->render('update', [
             'model' => $model,
-			'people' => $people,
         ]);
     }
 

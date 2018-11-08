@@ -38,19 +38,19 @@ use yii\data\ArrayDataProvider;
 		<div class='col-md-6'>
 			<?php
 		    $dataProvider = new ArrayDataProvider([
-		        'allModels' => $model->list,
+		        'allModels' => $people,
 				'pagination' => false,
 		        'key' => 'id',
-		        'sort' => [
-		            'attributes' => [
-						'man.companyid', 
-						'man.fullname'
-					],
-		            'defaultOrder' => [
-						'man.companyid' => SORT_ASC,
-		                'man.fullname' => SORT_ASC,
-		            ],
-		        ],
+		        // 'sort' => [
+		            // 'attributes' => [
+						// 'companyid', 
+						// 'fullname'
+					// ],
+		            // 'defaultOrder' => [
+						// 'man.companyid' => SORT_ASC,
+		                // 'man.fullname' => SORT_ASC,
+		            // ],
+		        // ],
 		    ]);
 			$currentCompanyID = null;
 		// 	Yii::warning('language = ' . Yii::app()->language);
@@ -64,16 +64,19 @@ use yii\data\ArrayDataProvider;
 					['title' => Yii::t('yii', 'добавить'), 'name' => 'lists']),
 				'beforeRow' => function ($model, $key, $index, $grid) use (&$currentCompanyID)
 				{
-					if($model->man->companyid != $currentCompanyID) {
+					if($model->companyid != $currentCompanyID) {
 		// 				return '<tr><td colspan=10>'.$model->month.'</td></tr>';
-						$currentCompanyID = $model->man->companyid;
-						return '<tr><td colspan=3>' . $model->man->company->simplename . '</td></tr>';
+						$currentCompanyID = $model->companyid;
+						if(isset($model->company->simplename)) $companyName = $model->company->simplename;
+						else $companyName = null;
+						// Yii::warning(print_r($model, true));
+						return '<tr><td colspan=3>' . $companyName . '</td></tr>';
 					}
 				},
 		        'columns' => [
 		            ['class' => 'yii\grid\SerialColumn'],
 
-		            'man.fullname',
+		            'fullname',
 					[
 						'class' => 'yii\grid\ActionColumn',
 						'header' => 'Actions',

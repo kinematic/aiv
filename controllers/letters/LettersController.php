@@ -8,7 +8,7 @@ use app\models\letters\LettersSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-
+use app\models\people\People;
 /**
  * LettersController implements the CRUD actions for Letters model.
  */
@@ -96,12 +96,17 @@ class LettersController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-
+		$people = People::find()
+		->leftJoin('letters_lists ll', 'll.manid = people.id')
+		->innerJoin('people_companies pc', 'people.companyid = pc.id')
+		->orderBy('pc.simplename, firstname')->all() ;
+		
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('update', [
                 'model' => $model,
+				'people' => $people,
             ]);
         }
     }

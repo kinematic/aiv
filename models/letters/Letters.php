@@ -3,7 +3,7 @@
 namespace app\models\letters;
 
 use Yii;
-use app\models\Sites;
+use app\models\sites\Sites;
 
 /**
  * This is the model class for table "letters_letters".

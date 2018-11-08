@@ -1,4 +1,4 @@
-фй<?php
+<?php
 
 use yii\helpers\Html;
 // use yii\widgets\DetailView;
@@ -12,8 +12,6 @@ $this->title = 'Письмо на проход на ' . $model->site->sitename;
 // $this->params['breadcrumbs'][] = ['label' => 'Letters', 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->site->sitename, 'url' => ['sites/sites/view', 'id' => $model->site->id]];
 // $this->params['breadcrumbs'][] = $this->title;
-// print_r($model->site->fulladdress);
-print_r($model->signature)
 ?>
 <div class="letters-view">
 
@@ -80,10 +78,16 @@ print_r($model->signature)
 	</div>
 	<div class='row'>
 		<div class='col-md-4 col-md-offset-1'>
-			<?//= nl2br($model->signature->position) ?>
+			<?php 
+				if(isset($model->signature->position)) echo nl2br($model->signature->position); 
+				else echo '<mark>немає посади</mark>';	
+			?>
 		</div>
 		<div class='col-md-3 col-md-offset-3'>
-			<?//= nl2br($model->signature->chief->signature) ?>
+			<?php 
+				if(isset($model->signature->chief->signature)) echo nl2br($model->signature->chief->signature); 
+				else echo '<mark>немає підпису</mark>';	
+			?>
 		</div>
 	</div>
 

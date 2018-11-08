@@ -8,6 +8,13 @@ use yii\grid\GridView;
 /* @var $this yii\web\View */
 /* @var $model app\models\letters\Lists */
 /* @var $form yii\widgets\ActiveForm */
+<<<<<<< Updated upstream
+=======
+var_dump(\Yii::$app->controller);
+die();
+echo $tmp;
+print_r($people);
+>>>>>>> Stashed changes
 ?>
 
 <div class="lists-form">
