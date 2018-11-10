@@ -60,7 +60,7 @@ use yii\data\SqlDataProvider;
 			
 			$dataProvider = new SqlDataProvider([
 				'sql' => '
-					SELECT * 
+					SELECT *, p.id as pid 
 					FROM people p
 					LEFT OUTER JOIN (SELECT * FROM letters_lists WHERE letterid = :letterid) ll ON p.id = ll.manid
 					LEFT OUTER JOIN people_companies pc ON p.companyid = pc.id
@@ -105,20 +105,22 @@ use yii\data\SqlDataProvider;
 							// Yii::warning(print_r($data->ll, true));
 							// Yii::warning(var_dump($data['ll']));
 							// die();
-							if(isset($data['manid'])) {
-								$manid = $data['manid'];
-								// Yii::warning('$manid = '. $manid);
-							}
-							else $manid = 0;
+// 							if(isset($data['manid'])) {
+// 								$manid = $data['manid'];
+// 								// Yii::warning('$manid = '. $manid);
+// 							}
+// 							else $manid = 0;
 
  
 		                    return [
-			                    'value' => $data['id'],
-								'checked' => $data['id'] == $manid,
+			                    'value' => $data['pid'],
+								'checked' => $data['pid'] == $data['manid'],
 		                    ];
 		                }
 		            ],
 		            'firstname',
+					'pid',
+					'manid',
 					[
 						'class' => 'yii\grid\ActionColumn',
 					],
