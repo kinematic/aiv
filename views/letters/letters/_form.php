@@ -5,7 +5,7 @@ use yii\widgets\ActiveForm;
 use yii\helpers\ArrayHelper;
 use app\models\letters\Signature;
 use yii\grid\GridView;
-use yii\data\ArrayDataProvider;
+use yii\data\SqlDataProvider;
 /* @var $this yii\web\View */
 /* @var $model app\models\letters\Letters */
 /* @var $form yii\widgets\ActiveForm */
@@ -41,21 +41,35 @@ use yii\data\ArrayDataProvider;
 	<div class='row'>
 		<div class='col-md-6'>
 			<?php
-		    $dataProvider = new ArrayDataProvider([
-		        'allModels' => $people,
+		    // $dataProvider = new ArrayDataProvider([
+		        // 'allModels' => $people,
+				// 'pagination' => false,
+		        // 'key' => 'id',
+		        // // 'sort' => [
+		            // // 'attributes' => [
+						// // 'companyid', 
+						// // 'fullname'
+					// // ],
+		            // // 'defaultOrder' => [
+						// // 'man.companyid' => SORT_ASC,
+		                // // 'man.fullname' => SORT_ASC,
+		            // // ],
+		        // // ],
+		    // ]);
+			
+			
+			$dataProvider = new SqlDataProvider([
+				'sql' => '
+					SELECT * 
+					FROM people p
+					LEFT OUTER JOIN (SELECT * FROM letters_lists WHERE letterid = :letterid) ll ON p.id = ll.manid
+					LEFT OUTER JOIN people_companies pc ON p.companyid = pc.id
+					ORDER BY pc.simplename, p.firstname',
+				'params' => [':letterid' => $model->id],
 				'pagination' => false,
-		        'key' => 'id',
-		        // 'sort' => [
-		            // 'attributes' => [
-						// 'companyid', 
-						// 'fullname'
-					// ],
-		            // 'defaultOrder' => [
-						// 'man.companyid' => SORT_ASC,
-		                // 'man.fullname' => SORT_ASC,
-		            // ],
-		        // ],
-		    ]);
+			]);
+			
+			
 			$currentCompanyID = null;
 		// 	Yii::warning('language = ' . Yii::app()->language);
 			echo GridView::widget([
@@ -68,10 +82,13 @@ use yii\data\ArrayDataProvider;
 					['title' => Yii::t('yii', 'добавить'), 'name' => 'lists']),
 				'beforeRow' => function ($model, $key, $index, $grid) use (&$currentCompanyID)
 				{
-					if($model->companyid != $currentCompanyID) {
+				
+				// print_r($model);
+				// die();
+					if($model['companyid'] != $currentCompanyID) {
 		// 				return '<tr><td colspan=10>'.$model->month.'</td></tr>';
-						$currentCompanyID = $model->companyid;
-						if(isset($model->company->simplename)) $companyName = $model->company->simplename;
+						$currentCompanyID = $model['companyid'];
+						if(isset($model['simplename'])) $companyName = $model['simplename'];
 						else $companyName = null;
 						// Yii::warning(print_r($model, true));
 						return '<tr><td colspan=3>' . $companyName . '</td></tr>';
@@ -84,22 +101,24 @@ use yii\data\ArrayDataProvider;
 		                'header' => 'выбор',
 		                'name' => 'Letters[select]',
 						'checkboxOptions' => function ($data) {
-// print_r($data->list);
-// die();
-if(isset($data->list->manid)) {
-$manid = $data->list->manid;
-Yii::warning('$manid = '. $manid);
-}
-else $manid = null;
+							
+							// Yii::warning(print_r($data->ll, true));
+							// Yii::warning(var_dump($data['ll']));
+							// die();
+							if(isset($data['manid'])) {
+								$manid = $data['manid'];
+								// Yii::warning('$manid = '. $manid);
+							}
+							else $manid = 0;
 
  
 		                    return [
-			                    'value' => $data->id,
-								'checked' => $data->id == $manid,
+			                    'value' => $data['id'],
+								'checked' => $data['id'] == $manid,
 		                    ];
 		                }
 		            ],
-		            'fullname',
+		            'firstname',
 					[
 						'class' => 'yii\grid\ActionColumn',
 					],

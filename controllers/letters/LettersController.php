@@ -103,6 +103,13 @@ class LettersController extends Controller
 // 		->where('people.id = 165')
 		->orderBy('pc.simplename, firstname')->all() ;
 		
+		
+		// $connection = Yii::$app->getDb();
+		// $command = $connection->createCommand("
+		
+		
+		// ");
+		
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
