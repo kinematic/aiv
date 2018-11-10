@@ -97,8 +97,10 @@ class LettersController extends Controller
     {
         $model = $this->findModel($id);
 		$people = People::find()
-		->leftJoin('letters_lists ll', 'll.manid = people.id')
-		->innerJoin('people_companies pc', 'people.companyid = pc.id')
+// 		->select('people.*, pc.*, ll.*')
+		->leftJoin('(select * from letters_lists where letterid = 1) ll', 'll.manid = people.id')
+		->leftJoin('people_companies pc', 'people.companyid = pc.id')
+// 		->where('people.id = 165')
 		->orderBy('pc.simplename, firstname')->all() ;
 		
         if ($model->load(Yii::$app->request->post()) && $model->save()) {

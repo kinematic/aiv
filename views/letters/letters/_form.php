@@ -29,11 +29,15 @@ use yii\data\ArrayDataProvider;
 		    <?= $form->field($model, 'appeal3')->textInput(['maxlength' => true]) ?>
 		</div>
 	</div>
-    <?= $form->field($model, 'text1')->textarea(['rows' => 3]) ?>
 	<div class="row">
-		<?=$model->site->fulladdress ?>
+		<div class='col-md-12'>
+		    <?= $form->field($model, 'text1')->textarea(['rows' => 3]) ?>
+		
+			<?=$model->site->fulladdress ?>
+		
+		    <?= $form->field($model, 'text2')->textarea(['rows' => 3]) ?>
+		</div>
 	</div>
-    <?= $form->field($model, 'text2')->textarea(['rows' => 3]) ?>
 	<div class='row'>
 		<div class='col-md-6'>
 			<?php
@@ -75,41 +79,29 @@ use yii\data\ArrayDataProvider;
 				},
 		        'columns' => [
 		            ['class' => 'yii\grid\SerialColumn'],
+		            [
+		                'class' => 'yii\grid\CheckboxColumn',
+		                'header' => 'выбор',
+		                'name' => 'Letters[select]',
+						'checkboxOptions' => function ($data) {
+// print_r($data->list);
+// die();
+if(isset($data->list->manid)) {
+$manid = $data->list->manid;
+Yii::warning('$manid = '. $manid);
+}
+else $manid = null;
 
+ 
+		                    return [
+			                    'value' => $data->id,
+								'checked' => $data->id == $manid,
+		                    ];
+		                }
+		            ],
 		            'fullname',
 					[
 						'class' => 'yii\grid\ActionColumn',
-						'header' => 'Actions',
-						'headerOptions' => ['style' => 'color:#337ab7'],
-						'template' => '{view} {update} {delete}',
-						'buttons' => [
-						'view' => function ($url, $model) {
-							return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', $url, ['title' => Yii::t('app', 'lead-view')]);
-						},
-
-						'update' => function ($url, $model) {
-							return Html::a('<span class="glyphicon glyphicon-pencil"></span>', $url, ['title' => Yii::t('app', 'lead-update')]);
-						},
-						'delete' => function ($url, $model) {
-							return Html::a('<span class="glyphicon glyphicon-trash"></span>', $url, ['title' => Yii::t('app', 'lead-delete')]);
-						}
-						],
-						'urlCreator' => function ($action, $model, $key, $index) {
-							if ($action === 'view') {
-							$url ='index.php?r=client-login/lead-view&id='.$model->id;
-							return $url;
-						}
-
-						if ($action === 'update') {
-							$url ='index.php?r=client-login/lead-update&id='.$model->id;
-							return $url;
-						}
-						if ($action === 'delete') {
-							$url ='index.php?r=client-login/lead-delete&id='.$model->id;
-							return $url;
-						}
-
-						}
 					],
 		        ],
 		    ]); ?>

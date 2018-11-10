@@ -17,11 +17,11 @@ use app\models\people\Patronymicname;
     <?php $form = ActiveForm::begin(); ?>
 
 	<div class="row">
-		<div class="col-sm-4">
+		<div class="col-md-4">
 		<?= $form->field($model, 'firstname')->textInput(['maxlength' => true]) ?>
 		<?= $form->field($model, 'companyid')->textInput() ?>
 		</div>
-		<div class="col-sm-4">
+		<div class="col-md-4">
 		<?php 
 		$listdata=Secondname::find()->select(['name as value', 'name as label'])->asArray()->all();
 		?>
@@ -52,7 +52,7 @@ use app\models\people\Patronymicname;
 		// ]); ?>
 		<?= $form->field($model, 'positionid')->textInput() ?>
 		</div>
-		<div class="col-sm-4">
+		<div class="col-md-4">
 		<?= $form->field($model, 'patronymicnameid')->textInput() ?>
 		</div>
 	</div>

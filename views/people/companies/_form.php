@@ -11,13 +11,16 @@ use yii\widgets\ActiveForm;
 <div class="companies-form">
 
     <?php $form = ActiveForm::begin(); ?>
-
-    <?= $form->field($model, 'simplename')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'officialname')->textInput(['maxlength' => true]) ?>
-
+	<div class="row">
+		<div class="col-md-3">
+		    <?= $form->field($model, 'simplename')->textInput(['maxlength' => true]) ?>
+		</div>
+		<div class="col-md-3">
+		    <?= $form->field($model, 'officialname')->textInput(['maxlength' => true]) ?>
+		</div>
+	</div>
     <div class="form-group">
-        <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+        <?= Html::submitButton($model->isNewRecord ? 'Сохранить' : 'Сохранить', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

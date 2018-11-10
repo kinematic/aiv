@@ -4,6 +4,7 @@ namespace app\models\people;
 
 use Yii;
 use app\models\address\Obl;
+use app\models\letters\Lists;
 
 /**
  * This is the model class for table "people".
@@ -116,5 +117,13 @@ class People extends \yii\db\ActiveRecord
 	
 	public function getPassport() {
          return $this->hasOne(Passport::className(), [ 'manid' => 'id' ]);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getList()
+    {
+        return $this->hasMany(Lists::className(), ['manid' => 'id']);
     }
 }
