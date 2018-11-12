@@ -9,6 +9,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use app\models\people\People;
+use app\models\letters\Lists;
 /**
  * LettersController implements the CRUD actions for Letters model.
  */
@@ -96,26 +97,36 @@ class LettersController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-		$people = People::find()
-// 		->select('people.*, pc.*, ll.*')
-		->leftJoin('(select * from letters_lists where letterid = 1) ll', 'll.manid = people.id')
-		->leftJoin('people_companies pc', 'people.companyid = pc.id')
-// 		->where('people.id = 165')
-		->orderBy('pc.simplename, firstname')->all() ;
-		
-		
-		// $connection = Yii::$app->getDb();
-		// $command = $connection->createCommand("
-		
-		
-		// ");
-		
+		// print_r(Yii::$app->request->post());
+		// $model->load(Yii::$app->request->post());
+		// $model->save();
+		// print_r($model->getErrors());
+		// die();
+		// print_r($model);
+			// die();
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+			// добавление новых людей
+			foreach($model->peopleSelect as $item) {
+				if(!Lists::find()->where(['letterid' => $model->id, 'manid' => $item])->one()) {
+					$record = new Lists();
+					$record->letterid = $model->id;
+					$record->manid = $item;
+					$record->save();
+				}
+			}
+			// $records = Lists::find()->where(['letterid' => $model->id])->all();
+			$records = implode(', ', $model->peopleSelect);
+			Yii::$app->db->createCommand("
+				DELETE 
+				FROM letters_lists 
+				WHERE letterid = $letterid
+				AND manid NOT IN ($records)
+			")->execute();
+			// die();
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('update', [
                 'model' => $model,
-				'people' => $people,
             ]);
         }
     }

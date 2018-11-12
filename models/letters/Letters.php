@@ -22,6 +22,7 @@ use app\models\sites\Sites;
  */
 class Letters extends \yii\db\ActiveRecord
 {
+	public $peopleSelect;
     /**
      * @inheritdoc
      */
@@ -41,6 +42,7 @@ class Letters extends \yii\db\ActiveRecord
             [['text1', 'text2'], 'string'],
             [['appeal1'], 'string', 'max' => 150],
             [['appeal2', 'appeal3', 'firstname'], 'string', 'max' => 50],
+			['peopleSelect', 'each', 'rule' => ['integer']],
         ];
     }
 

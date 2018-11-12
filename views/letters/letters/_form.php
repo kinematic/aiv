@@ -41,57 +41,39 @@ use yii\data\SqlDataProvider;
 	<div class='row'>
 		<div class='col-md-6'>
 			<?php
-		    // $dataProvider = new ArrayDataProvider([
-		        // 'allModels' => $people,
-				// 'pagination' => false,
-		        // 'key' => 'id',
-		        // // 'sort' => [
-		            // // 'attributes' => [
-						// // 'companyid', 
-						// // 'fullname'
-					// // ],
-		            // // 'defaultOrder' => [
-						// // 'man.companyid' => SORT_ASC,
-		                // // 'man.fullname' => SORT_ASC,
-		            // // ],
-		        // // ],
-		    // ]);
-			
-			
 			$dataProvider = new SqlDataProvider([
-				'sql' => '
-					SELECT *, p.id as pid 
+				'sql' => "
+					SELECT p.id, CONCAT_WS(' ', p.firstname, sn.name, pn.name) AS fullname, ll.manid, pc.simplename AS companyname, pc.id AS companyid
 					FROM people p
+					LEFT OUTER JOIN people_secondname sn ON p.secondnameid = sn.id
+					LEFT OUTER JOIN people_patronymicname pn ON p.patronymicnameid = pn.id
 					LEFT OUTER JOIN (SELECT * FROM letters_lists WHERE letterid = :letterid) ll ON p.id = ll.manid
 					LEFT OUTER JOIN people_companies pc ON p.companyid = pc.id
-					ORDER BY pc.simplename, p.firstname',
+					ORDER BY companyname, fullname",
 				'params' => [':letterid' => $model->id],
 				'pagination' => false,
 			]);
 			
-			
 			$currentCompanyID = null;
-		// 	Yii::warning('language = ' . Yii::app()->language);
 			echo GridView::widget([
 		        'dataProvider' => $dataProvider,
 				'showHeader' => false,
 				'caption' => '<h3 style="display:inline">Работники</h3>' . ' ' . 
 					Html::a(
 					'<span class="glyphicon glyphicon-plus"></span>', 
-					['letters/lists/update', 'id' => $model->id], 
-					['title' => Yii::t('yii', 'добавить'), 'name' => 'lists']),
+					['people/people/create'], 
+					[
+						'title' => Yii::t('yii', 'добавить'), 
+						'name' => 'lists',
+						'target' => '_blank',
+					]),
 				'beforeRow' => function ($model, $key, $index, $grid) use (&$currentCompanyID)
 				{
-				
-				// print_r($model);
-				// die();
 					if($model['companyid'] != $currentCompanyID) {
-		// 				return '<tr><td colspan=10>'.$model->month.'</td></tr>';
 						$currentCompanyID = $model['companyid'];
-						if(isset($model['simplename'])) $companyName = $model['simplename'];
+						if(isset($model['companyname'])) $companyName = $model['companyname'];
 						else $companyName = null;
-						// Yii::warning(print_r($model, true));
-						return '<tr><td colspan=3>' . $companyName . '</td></tr>';
+						return '<tr><td colspan="100%"><b>' . $companyName . '</b></td></tr>';
 					}
 				},
 		        'columns' => [
@@ -99,30 +81,62 @@ use yii\data\SqlDataProvider;
 		            [
 		                'class' => 'yii\grid\CheckboxColumn',
 		                'header' => 'выбор',
-		                'name' => 'Letters[select]',
+		                'name' => 'Letters[peopleSelect]',
 						'checkboxOptions' => function ($data) {
-							
-							// Yii::warning(print_r($data->ll, true));
-							// Yii::warning(var_dump($data['ll']));
-							// die();
-// 							if(isset($data['manid'])) {
-// 								$manid = $data['manid'];
-// 								// Yii::warning('$manid = '. $manid);
-// 							}
-// 							else $manid = 0;
-
- 
+							if(isset($data['manid'])) {
+								$manid = $data['manid'];
+							}
+							else $manid = 0;
 		                    return [
-			                    'value' => $data['pid'],
-								'checked' => $data['pid'] == $data['manid'],
+			                    'value' => $data['id'],
+								'checked' => $data['id'] == $manid,
 		                    ];
 		                }
 		            ],
-		            'firstname',
-					'pid',
-					'manid',
+		            'fullname',
 					[
 						'class' => 'yii\grid\ActionColumn',
+						'header' => 'Actions',
+						'headerOptions' => ['style' => 'color:#337ab7'],
+						'template' => '{view} {update} {delete}',
+						'buttons' => [
+						'view' => function ($url, $model) {
+							return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', $url, [
+								'title' => Yii::t('app', 'lead-view'),
+								'target' => '_blank',
+							]);
+						},
+
+						'update' => function ($url, $model) {
+							return Html::a('<span class="glyphicon glyphicon-pencil"></span>', $url, [
+								'title' => Yii::t('app', 'lead-update'),
+								'target' => '_blank',
+							]);
+						},
+						'delete' => function ($url, $model) {
+							return Html::a('<span class="glyphicon glyphicon-trash"></span>', $url, [
+								'title' => Yii::t('app', 'lead-delete'),
+								'target' => '_blank',
+							]);
+						}
+
+						],
+						'urlCreator' => function ($action, $model, $key, $index) {
+							if ($action === 'view') {
+								$url ='index.php?r=people/people/view&id=' . $model['id'];
+								return $url;
+							}
+
+							if ($action === 'update') {
+								$url ='index.php?r=people/people/update&id=' . $model['id'];
+								return $url;
+							}
+							if ($action === 'delete') {
+								$url ='index.php?r=people/people/delete&id=' . $model['id'];
+								return $url;
+							}
+
+						}
 					],
 		        ],
 		    ]); ?>
