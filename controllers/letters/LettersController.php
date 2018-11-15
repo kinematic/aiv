@@ -97,13 +97,6 @@ class LettersController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-		// print_r(Yii::$app->request->post());
-		// $model->load(Yii::$app->request->post());
-		// $model->save();
-		// print_r($model->getErrors());
-		// die();
-		// print_r($model);
-			// die();
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
 			// добавление новых людей
 			foreach($model->peopleSelect as $item) {
@@ -114,15 +107,14 @@ class LettersController extends Controller
 					$record->save();
 				}
 			}
-			// $records = Lists::find()->where(['letterid' => $model->id])->all();
+			// удаление людей
 			$records = implode(', ', $model->peopleSelect);
 			Yii::$app->db->createCommand("
 				DELETE 
 				FROM letters_lists 
-				WHERE letterid = $letterid
-				AND manid NOT IN ($records)
+				WHERE letterid = {$model->id}
+				AND manid NOT IN ({$records})
 			")->execute();
-			// die();
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('update', [
@@ -142,6 +134,18 @@ class LettersController extends Controller
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
+    }
+
+    /**
+     * Displays a single Letters model.
+     * @param integer $id
+     * @return mixed
+     */
+    public function actionLetter($id)
+    {
+        return $this->render('letter', [
+            'model' => $this->findModel($id),
+        ]);
     }
 
     /**

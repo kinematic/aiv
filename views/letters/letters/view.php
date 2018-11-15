@@ -26,6 +26,7 @@ $this->params['breadcrumbs'][] = ['label' => $model->site->sitename, 'url' => ['
                 'method' => 'post',
             ],
         ]) ?>
+		<?= Html::a('Генерировать', ['letter', 'id' => $model->id], ['class' => 'btn btn-info']) ?>
     </p>
 	<div class='row'>
 		<div class='col-md-6 col-md-offset-6'>

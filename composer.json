@@ -23,7 +23,8 @@
         "2amigos/yii2-selectize-widget": "~1.0",
         "yii2mod/yii2-selectize": "*",
         "kartik-v/yii2-widgets": "^3.4",
-        "yiisoft/yii2-jui": "^2.0"
+        "yiisoft/yii2-jui": "^2.0",
+        "sasha6806/yii2-phpword": "*"
     },
     "require-dev": {
         "yiisoft/yii2-gii": "~2.0.0",
