@@ -30,29 +30,32 @@ $sectionStyle = array(
 );
 
 $section = $phpWord->addSection($sectionStyle);
-$section->addPageBreak();
+$section->addTextBreak();
 
 $styleTable = array();
 $styleFirstRow = array();
 $styleCell = array();
 $styleCellBTLR = array();
-$fontStyle = array();
-$phpWord->addTableStyle('Fancy Table', $styleTable, $styleFirstRow);
-$table = $section->addTable('Fancy Table', array('width' => 100));
+$fontStyle = array('size' => 9);
+$paragraphStyle = array('spaceAfter' => 0);
+$phpWord->addTableStyle('Header Table Style', $styleTable, $styleFirstRow);
+$table = $section->addTable('Header Table', array('width' => 100));
 
 $table->addRow();
 $widthCell = round(\PhpOffice\PhpWord\Shared\Converter::cmToTwip(18)/2, 0);
 $table->addCell($widthCell, $styleCell)
-->addText('"___" _________ 2018 р. № ___________', $fontStyle);
+->addText('"___" _________ 2018 р. № ___________', $fontStyle, $paragraphStyle);
 $cell = $table->addCell($widthCell, $styleCell);
-$cell->addText($model->appeal1, $fontStyle);
-$cell->addText($model->appeal2, $fontStyle);
+$cell->addText($model->appeal1, $fontStyle, $paragraphStyle);
+$cell->addText($model->appeal2, $fontStyle, $paragraphStyle);
 
 $section->addText('Дозвіл на прохід та виконання робіт на 2018 р. (UA0932)', array('italic' => TRUE));
 
 $section->addText($model->appeal3, array('bold' => TRUE), array('align' => 'center'));
 
-$textrun = $section->createTextRun();
+// $textrun = $section->addTextRun(array('indent' => 720));
+$textrun = $section->addTextRun(array('indentation' => array('firstLine' => 720)));
+
 $textrun->addText($model->text1);
 $textrun->addText($model->site->fulladdress);
 $textrun->addText($model->text2);
@@ -74,26 +77,33 @@ $dataProvider = new ArrayDataProvider([
 
 $workers = $dataProvider->getModels();
 
+// $phpWord->addTableStyle('Fancy Table', array('cellMarginRight' => 170), $styleFirstRow);
+$phpWord->addTableStyle('People Table Style', array('cellMargin' => array('right' => 170)), $styleFirstRow);
+$table = $section->addTable('People Table', array('width' => 70));
+print round(\PhpOffice\PhpWord\Shared\Converter::cmToTwip(1.27), 0);
+$fontStyle = array('size' => 8);
+$paragraphStyle = array('spaceAfter' => 0);
+$styleCell = array();
+
 foreach($workers as $key => $value) {
-// 	print $key . '<br>';
-	print_r($value);
-// 	print $value['fullname'];
-
-
+	$table->addRow();
+	$table->addCell(null, $styleCell)->addText($key + 1, $fontStyle, $paragraphStyle);
+	$table->addCell(null, $styleCell)->addText($value->man->fullname, $fontStyle, $paragraphStyle);
+	$table->addCell(null, $styleCell)->addText($value->man->position, $fontStyle, $paragraphStyle);
 };
 
 
 
 
-// header("Content-Description: File Transfer");
-// header('Content-Disposition: attachment; filename="' . $model->site->sitename . '.docx"');
-// header('Content-Type: application/vnd.openxmlformats-officedocument.wordprocessingml.document');
-// header('Content-Transfer-Encoding: binary');
-// header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
-// header('Expires: 0');
-// $xmlWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord, 'Word2007');
-// ob_clean();
-// $xmlWriter->save("php://output");
-// exit;
+header("Content-Description: File Transfer");
+header('Content-Disposition: attachment; filename="' . $model->site->sitename . '.docx"');
+header('Content-Type: application/vnd.openxmlformats-officedocument.wordprocessingml.document');
+header('Content-Transfer-Encoding: binary');
+header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+header('Expires: 0');
+$xmlWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord, 'Word2007');
+ob_clean();
+$xmlWriter->save("php://output");
+exit;
 
 ?> 
