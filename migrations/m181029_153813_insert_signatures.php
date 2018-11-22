@@ -25,7 +25,7 @@ class m181029_153813_insert_signatures extends Migration
             $this->insert('letters_signature',
                 [
 					'id' => $code['id'],
-					'userid' => $code['userid'],
+					'manid' => $code['userid'],
 					'position' => $code['rank']
                 ]
             );

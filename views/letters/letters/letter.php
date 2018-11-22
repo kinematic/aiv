@@ -30,7 +30,8 @@ $sectionStyle = array(
 );
 
 $section = $phpWord->addSection($sectionStyle);
-$section->addTextBreak();
+
+// $section->addTextBreak();
 
 $styleTable = array();
 $styleFirstRow = array();
@@ -42,6 +43,7 @@ $phpWord->addTableStyle('Header Table Style', $styleTable, $styleFirstRow);
 $table = $section->addTable('Header Table', array('width' => 100));
 
 $table->addRow();
+
 $widthCell = round(\PhpOffice\PhpWord\Shared\Converter::cmToTwip(18)/2, 0);
 $table->addCell($widthCell, $styleCell)
 ->addText('"___" _________ 2018 р. № ___________', $fontStyle, $paragraphStyle);
@@ -49,16 +51,19 @@ $cell = $table->addCell($widthCell, $styleCell);
 $cell->addText($model->appeal1, $fontStyle, $paragraphStyle);
 $cell->addText($model->appeal2, $fontStyle, $paragraphStyle);
 
+$section->addTextBreak();
 $section->addText('Дозвіл на прохід та виконання робіт на 2018 р. (UA0932)', array('italic' => TRUE));
-
+$section->addTextBreak();
 $section->addText($model->appeal3, array('bold' => TRUE), array('align' => 'center'));
-
+$section->addTextBreak();
 // $textrun = $section->addTextRun(array('indent' => 720));
 $textrun = $section->addTextRun(array('indentation' => array('firstLine' => 720)));
 
 $textrun->addText($model->text1);
 $textrun->addText($model->site->fulladdress);
 $textrun->addText($model->text2);
+
+$section->addTextBreak();
 
 $dataProvider = new ArrayDataProvider([
     'allModels' => $model->list,
@@ -92,7 +97,12 @@ foreach($workers as $key => $value) {
 	$table->addCell(null, $styleCell)->addText($value->man->position, $fontStyle, $paragraphStyle);
 };
 
+$section->addTextBreak();
 
+$textrun = $section->addTextRun();
+
+$textrun->addText($model->signature->position);
+$textrun->addText($model->signature->manid);
 
 
 header("Content-Description: File Transfer");

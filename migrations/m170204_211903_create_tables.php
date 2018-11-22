@@ -205,7 +205,7 @@ class m170204_211903_create_tables extends Migration
 // 		таблица подписей к письмам
 		$this->createTable('letters_signature', [
             'id' => $this->primaryKey(),
-            'userid' => $this->integer()->notNull(),
+            'manid' => $this->integer()->notNull(),
             'position' => $this->string(50)->notNull(),
         ], $options);
 
