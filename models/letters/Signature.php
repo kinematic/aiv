@@ -47,7 +47,7 @@ class Signature extends \yii\db\ActiveRecord
     }
 
     public function getChief() {
-         return $this->hasOne(People::className(), [ 'id' => 'userid' ]);
+         return $this->hasOne(People::className(), [ 'id' => 'manid' ]);
     }
 
 // 	public function getSignature() {

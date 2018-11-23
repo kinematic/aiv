@@ -21,12 +21,12 @@ $properties->setKeywords('my, key, word');
 
 $sectionStyle = array(
 	'orientation' => 'landscape',
-	'pageSizeH' => round(\PhpOffice\PhpWord\Shared\Converter::cmToTwip(29.7), 0),
-	'pageSizeW' => round(\PhpOffice\PhpWord\Shared\Converter::cmToTwip(21), 0),
-	'marginTop' => round(\PhpOffice\PhpWord\Shared\Converter::cmToTwip(1), 0),
-	'marginBottom' => round(\PhpOffice\PhpWord\Shared\Converter::cmToTwip(1), 0),
-	'marginLeft' => round(\PhpOffice\PhpWord\Shared\Converter::cmToTwip(2), 0),
-	'marginRight' => round(\PhpOffice\PhpWord\Shared\Converter::cmToTwip(1), 0),
+	'pageSizeH' => 16838,
+	'pageSizeW' => 11906,
+	'marginTop' => 567,
+	'marginBottom' => 567,
+	'marginLeft' => 1134,
+	'marginRight' => 567,
 );
 
 $section = $phpWord->addSection($sectionStyle);
@@ -39,12 +39,12 @@ $styleCell = array();
 $styleCellBTLR = array();
 $fontStyle = array('size' => 9);
 $paragraphStyle = array('spaceAfter' => 0);
-$phpWord->addTableStyle('Header Table Style', $styleTable, $styleFirstRow);
-$table = $section->addTable('Header Table', array('width' => 100));
+$phpWord->addTableStyle('HeaderTableStyle', $styleTable, $styleFirstRow);
+$table = $section->addTable('HeaderTableStyle', array('width' => 100));
 
 $table->addRow();
 
-$widthCell = round(\PhpOffice\PhpWord\Shared\Converter::cmToTwip(18)/2, 0);
+$widthCell = 5102;
 $table->addCell($widthCell, $styleCell)
 ->addText('"___" _________ 2018 р. № ___________', $fontStyle, $paragraphStyle);
 $cell = $table->addCell($widthCell, $styleCell);
@@ -57,7 +57,7 @@ $section->addTextBreak();
 $section->addText($model->appeal3, array('bold' => TRUE), array('align' => 'center'));
 $section->addTextBreak();
 // $textrun = $section->addTextRun(array('indent' => 720));
-$textrun = $section->addTextRun(array('indentation' => array('firstLine' => 720)));
+$textrun = $section->addTextRun(array('indentation' => array('firstLine' => 720), 'alignment'  => \PhpOffice\PhpWord\SimpleType\Jc::BOTH));
 
 $textrun->addText($model->text1);
 $textrun->addText($model->site->fulladdress);
@@ -83,18 +83,18 @@ $dataProvider = new ArrayDataProvider([
 $workers = $dataProvider->getModels();
 
 // $phpWord->addTableStyle('Fancy Table', array('cellMarginRight' => 170), $styleFirstRow);
-$phpWord->addTableStyle('People Table Style', array('cellMargin' => array('right' => 170)), $styleFirstRow);
-$table = $section->addTable('People Table', array('width' => 70));
-print round(\PhpOffice\PhpWord\Shared\Converter::cmToTwip(1.27), 0);
+$phpWord->addTableStyle('PeopleTableStyle', array('cellMargin' => array('right' => 170)), $styleFirstRow);
+$table = $section->addTable('PeopleTableStyle', array('width' => 70));
+
 $fontStyle = array('size' => 8);
 $paragraphStyle = array('spaceAfter' => 0);
 $styleCell = array();
 
 foreach($workers as $key => $value) {
 	$table->addRow();
-	$table->addCell(null, $styleCell)->addText($key + 1, $fontStyle, $paragraphStyle);
-	$table->addCell(null, $styleCell)->addText($value->man->fullname, $fontStyle, $paragraphStyle);
-	$table->addCell(null, $styleCell)->addText($value->man->position, $fontStyle, $paragraphStyle);
+	$table->addCell(567, $styleCell)->addText($key + 1, $fontStyle, $paragraphStyle);
+	$table->addCell(2835, $styleCell)->addText($value->man->fullname, $fontStyle, $paragraphStyle);
+	$table->addCell(2835, $styleCell)->addText($value->man->position, $fontStyle, $paragraphStyle);
 };
 
 $section->addTextBreak();
