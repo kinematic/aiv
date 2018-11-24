@@ -3,7 +3,7 @@
 namespace app\models\inventory;
 
 use Yii;
-use app\models\Sites;
+use app\models\sites\Sites;
 
 /**
  * This is the model class for table "inventory_discrepancy".
