@@ -96,26 +96,26 @@ use yii\data\SqlDataProvider;
 		            'fullname',
 					[
 						'class' => 'yii\grid\ActionColumn',
-						'header' => 'Actions',
+						'header' => 'Действия',
 						'headerOptions' => ['style' => 'color:#337ab7'],
 						'template' => '{view} {update} {delete}',
 						'buttons' => [
 						'view' => function ($url, $model) {
 							return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', $url, [
-								'title' => Yii::t('app', 'lead-view'),
+								'title' => Yii::t('app', 'посмотреть'),
 								'target' => '_blank',
 							]);
 						},
 
 						'update' => function ($url, $model) {
 							return Html::a('<span class="glyphicon glyphicon-pencil"></span>', $url, [
-								'title' => Yii::t('app', 'lead-update'),
+								'title' => Yii::t('app', 'редактировать'),
 								'target' => '_blank',
 							]);
 						},
 						'delete' => function ($url, $model) {
 							return Html::a('<span class="glyphicon glyphicon-trash"></span>', $url, [
-								'title' => Yii::t('app', 'lead-delete'),
+								'title' => Yii::t('app', 'удалить'),
 								'target' => '_blank',
 							]);
 						}
