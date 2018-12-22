@@ -17,8 +17,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <h1><?= Html::encode($this->title) ?></h1>
 
-	<div class='row'>	
-		<div class='col-md-6'>	
+	
 	
 			<div class='container'>
 				<ul class='nav nav-tabs'>
@@ -29,6 +28,8 @@ $this->params['breadcrumbs'][] = $this->title;
 				</ul>
 			</div>
 			<div class='tab-content'>
+				<div class='row'>	
+				<div class='col-md-6'>
 				<div class='tab-pane active' id='main'>
 					<p>
 						<?= Html::a('Редактировать', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
@@ -62,7 +63,9 @@ $this->params['breadcrumbs'][] = $this->title;
 							'inventdate',
 						],
 					]);
-					?>		
+					?>	
+					</div>	
+					<div class='col-md-6'>
 					<?php
 					echo GridView::widget([
 						'dataProvider' => new ArrayDataProvider([
@@ -88,6 +91,8 @@ $this->params['breadcrumbs'][] = $this->title;
 
 					]); 
 					?>
+					</div>
+					</div>
 					<?= GridView::widget([
 						'dataProvider' => new ArrayDataProvider([
 							'allModels' => $model->contacts,
