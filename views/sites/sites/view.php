@@ -96,9 +96,9 @@ $this->params['breadcrumbs'][] = $this->title;
 							
 							'key' => 'id',
 						]),
-						'caption' => Html::a('<h3>контакты</h3>', ['/contacts', 'siteID' => $model->id], ['title' => 'Редактировать']),
+						'caption' => Html::a('<h3>контакты</h3>', ['address/contacts', 'siteID' => $model->id], ['title' => 'Редактировать']),
 						'showHeader' => false,
-						'showOnEmpty' => false,
+						'showOnEmpty' => true,
 						'emptyText' => '',
 						'layout' => "{items}",
 						'columns' => [

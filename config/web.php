@@ -66,6 +66,11 @@ $config = [
         ],
         */
     ],
+	'modules' => [
+		'import' => [
+			'class' => 'app\modules\admin\Import',
+		],
+	],
     'params' => $params,
 ];
 
@@ -75,7 +80,7 @@ if (YII_ENV_DEV) {
     $config['modules']['debug'] = [
         'class' => 'yii\debug\Module',
         'traceLine' => '<a href="kate://open?url={file}&line={line}">{file}:{line}</a>',
-        'allowedIPs' => ['*'],
+        'allowedIPs' => ['10.44.94.161'],
         'panels' => [
             'db' => [
                 'class' => 'yii\debug\panels\DbPanel',
@@ -92,7 +97,10 @@ if (YII_ENV_DEV) {
     $config['bootstrap'][] = 'gii';
     $config['modules']['gii'] = [
         'class' => 'yii\gii\Module',
-        'allowedIPs' => ['*'],
+        'allowedIPs' => ['10.44.94.161'],
+    ];
+	$config['modules']['import'] = [
+        'class' => 'app\modules\admin\Import',
     ];
 }
 

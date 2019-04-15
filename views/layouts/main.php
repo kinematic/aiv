@@ -36,21 +36,63 @@ AppAsset::register($this);
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav navbar-right'],
         'items' => [
-            ['label' => 'Home', 'url' => ['/site/index']],
+			['label' => 'Люди', 'url' => ['/site/index'],
+				'items' => [
+					['label' => 'Пользователи', 'url' => ['people/users']],
+					['label' => 'Люди', 'url' => ['people/people']],
+					['label' => 'Имена', 'url' => ['people/secondname']],
+					['label' => 'Отчества', 'url' => ['people/patronymicname']],
+					['label' => 'Должности', 'url' => ['people/position']],
+					['label' => 'Компании', 'url' => ['people/companies']],
+				],
+			],
+			['label' => 'Объекты', 'url' => ['/site/index'],
+				'items' => [
+					['label' => 'Сайты', 'url' => ['sites/sites']],
+					['label' => 'Типы сайтов', 'url' => ['sites/sitestype']],
+					['label' => 'Регионы сайтов', 'url' => ['sites/sitesregion']],
+				],
+			],
+			['label' => 'Адреса', 'url' => ['/site/index'],
+				'items' => [
+					['label' => 'Области', 'url' => ['address/obl']],
+					['label' => 'Районы', 'url' => ['address/rn']],
+					['label' => 'Типы населённых пунктов', 'url' => ['address/typenp']],
+					['label' => 'Населённые пункты', 'url' => ['address/np']],
+					['label' => 'Типы улиц', 'url' => ['address/typestr']],
+					['label' => 'Улицы', 'url' => ['address/str']],
+					['label' => 'Дома', 'url' => ['address/bud']],
+					['label' => 'Название месности', 'url' => ['address/descr']],
+					['label' => 'Описание', 'url' => ['address/comment']],
+				],
+			],
+			['label' => 'Инвентаризация', 'url' => ['/site/index'],
+				'items' => [
+					['label' => 'Справочник оборудования', 'url' => ['inventory/catalog']],
+					['label' => 'Расхождения', 'url' => ['inventory/discrepancy']],
+				],
+			],
+			['label' => 'Письма', 'url' => ['/site/index'],
+				'items' => [
+					['label' => 'на проход', 'url' => ['letters/letters']],
+					['label' => 'Подписи', 'url' => ['letters/signature']],
+				],
+			],
+            // ['label' => 'Home', 'url' => ['/site/index']],
             // ['label' => 'About', 'url' => ['/site/about']],
             // ['label' => 'Contact', 'url' => ['/site/contact']],
-            Yii::$app->user->isGuest ? (
-                ['label' => 'Login', 'url' => ['/site/login']]
-            ) : (
-                '<li>'
-                . Html::beginForm(['/site/logout'], 'post')
-                . Html::submitButton(
-                    'Logout (' . Yii::$app->user->identity->username . ')',
-                    ['class' => 'btn btn-link logout']
-                )
-                . Html::endForm()
-                . '</li>'
-            )
+            // Yii::$app->user->isGuest ? (
+                // ['label' => 'Login', 'url' => ['/site/login']]
+            // ) : (
+                // '<li>'
+                // . Html::beginForm(['/site/logout'], 'post')
+                // . Html::submitButton(
+                    // 'Logout (' . Yii::$app->user->identity->username . ')',
+                    // ['class' => 'btn btn-link logout']
+                // )
+                // . Html::endForm()
+                // . '</li>'
+            // )
         ],
     ]);
     NavBar::end();

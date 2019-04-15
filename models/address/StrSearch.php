@@ -63,7 +63,7 @@ class StrSearch extends Str
         ]);
 
         $query->andFilterWhere(['like', 'name', $this->name]);
-
+		$query->orderBy('name');
         return $dataProvider;
     }
 }

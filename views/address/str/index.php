@@ -7,7 +7,7 @@ use yii\grid\GridView;
 /* @var $searchModel app\models\address\StrSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Strs';
+$this->title = 'Улицы';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="str-index">
@@ -16,18 +16,22 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a('Create Str', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Добавить', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
-    <?= GridView::widget([
-        'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
-        'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
+	<div class='row'>
+		<div class='col-md-6'>
+			<?= GridView::widget([
+				'dataProvider' => $dataProvider,
+				'filterModel' => $searchModel,
+				'columns' => [
+					['class' => 'yii\grid\SerialColumn'],
 
-            'id',
-            'name',
+					// 'id',
+					'name',
 
-            ['class' => 'yii\grid\ActionColumn'],
-        ],
-    ]); ?>
+					['class' => 'yii\grid\ActionColumn'],
+				],
+			]); ?>
+		</div>	
+	</div>		
 </div>

@@ -6,12 +6,6 @@ $this->title = 'AIV2';
 ?>
 <div class="site-index">
 
-    <div class="jumbotron">
-
-        <p class="lead">Это инженерный справочник.</p>
-
-    </div>
-
     <div class="body-content">
 
         <div class="row">

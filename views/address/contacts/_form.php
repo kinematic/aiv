@@ -16,11 +16,13 @@ use yii\widgets\ActiveForm;
 	if(!isset($model->objid)) $model->objid = $site->objid;
 	echo $form->field($model, 'objid')->hiddenInput()->label(false);
 	?>
+	<div class='row'>
+		<div class='col-md-4'>
+			<?= $form->field($model, 'contact')->textInput(['maxlength' => true])->label('контакт (тел. или email)') ?>
 
-    <?= $form->field($model, 'contact')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'description')->textInput(['maxlength' => true]) ?>
-
+			<?= $form->field($model, 'description')->textInput(['maxlength' => true]) ?>
+		</div>
+	</div>
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? 'Сохранить' : 'Сохранить', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
     </div>

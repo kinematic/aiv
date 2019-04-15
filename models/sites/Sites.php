@@ -323,20 +323,23 @@ class Sites extends \yii\db\ActiveRecord
         if ($length == 4) $p1 = substr($nr, 0, 1);
         else $p1 = null;
         
-        if ($p2 == 0) $p2 = 8;
-        else if ($p2 == 1) $p2 = 9;
-        else if ($p2 == 2) $p2 = 7;
-        else if ($p2 == 3) return null;
-        else if ($p2 == 4) $p2 = 6;
-        else if ($p2 == 5) return null;
-        else if ($p2 == 6) $p2 = 4;
-        else if ($p2 == 7) $p2 = 2;
-        else if ($p2 == 8) $p2 = 0;
-        else if ($p2 == 9) $p2 = 1;
-//         if ($p1 == 0) $p1 = null;
-        
-        return $p1 . $p2 . $p3;
+		if(is_numeric($p2)) {
+		
+			if ($p2 == 0) $p2 = 8;
+			else if ($p2 == 1) $p2 = 9;
+			else if ($p2 == 2) $p2 = 7;
+			else if ($p2 == 3) return null;
+			else if ($p2 == 4) $p2 = 6;
+			else if ($p2 == 5) return null;
+			else if ($p2 == 6) $p2 = 4;
+			else if ($p2 == 7) $p2 = 2;
+			else if ($p2 == 8) $p2 = 0;
+			else if ($p2 == 9) $p2 = 1;
+	//         if ($p1 == 0) $p1 = null;
+			
+			return $p1 . $p2 . $p3;
 
+		} else return strtoupper($nr);
     }
 
     public function getContacts() {

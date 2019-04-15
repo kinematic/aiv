@@ -300,11 +300,11 @@ class SitesController extends Controller
                 $gpsStirng = trim(stripcslashes ($gpsStirng));
                 //echo 'исходный: ' . $gpsStirng;
                 $gpsStirng = str_replace ('&ll=', " : ", $gpsStirng);
-                $gpsStirng = preg_replace("/\s*\"\s*|\s*∞\s*|\s*\'\s*|\s*\`\s*/", " ", $gpsStirng);
+                $gpsStirng = preg_replace("/\s*\"\s*|\s*∞\s*|\s*\'\s*|\s*\`\s*|\s°/", " ", $gpsStirng);
                 //echo 'удалили лишние символы: ' . $gpsStirng;
                 $gpsStirng = preg_replace("~\s+~", " ", $gpsStirng);
                 //print 'преобразованный: ' . $gpsStirng;
-                
+                // print $gpsStirng; die();
                 if (preg_match ("/([0-9]+)\s([0-9]+)\s([0-9]*)\sN/", $gpsStirng, $matches)) {
                     $latrad = $this->gradToRad($matches[1], $matches[2], $matches[3]);
                     preg_match ("/([0-9]+)\s([0-9]+)\s([0-9]*)\sE/", $gpsStirng, $matches);
@@ -319,15 +319,19 @@ class SitesController extends Controller
                     $latrad =  $this->gradToRad($matches[1], $matches[2], $matches[3]);
                     preg_match ("/E\s([0-9]{2})\s([0-9]{2})\s([0-9]{2}\,[0-9]{1})/", $gpsStirng, $matches);
                     $longrad =  $this->gradToRad($matches[1], $matches[2], $matches[3]);
+                } elseif (preg_match ("/Latitude:\s([0-9]+)\s°\s([0-9]+)\s'\s([0-9]*)/", $gpsStirng, $matches)) {
+                    $latrad =  $this->gradToRad($matches[1], $matches[2], $matches[3]);
+                    preg_match ("/Longitude:\s([0-9]+)\s°\s([0-9]+)\s'\s([0-9]*)/", $gpsStirng, $matches);
+                    $longrad =  $this->gradToRad($matches[1], $matches[2], $matches[3]);
                 }
                 
             }
         
         
         }
-        if ($latrad) $latint = $latrad * 1000000; 
+        if (isset($latrad)) $latint = $latrad * 1000000; 
         else $latint = null;
-        if ($longrad) $longint = $longrad * 1000000;
+        if (isset($longrad)) $longint = $longrad * 1000000;
         else $longint = null;
         
         if ($latint and $longint) {
@@ -400,7 +404,8 @@ class SitesController extends Controller
     
 	public function actionCreateObject($id)
     {
-		$model = Sites::find()->where(['id' => $id])->one();
+		// $model = Sites::find()->where(['id' => $id])->one();
+		$model = $this->findModel($id);
 		$maxObjID = Sites::find()->max('objid');
 		$model->objid = $maxObjID + 1;
 		$model->relationid = 2;
