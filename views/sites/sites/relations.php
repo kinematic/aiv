@@ -56,7 +56,7 @@ $this->params['breadcrumbs'][] = 'Связи';
 					'urlCreator' => function ($action, $othermodel, $key, $index) use ($model) {
 						
 						if ($action === 'deleteJoin') {
-							$url ='index.php?r=sites/delete-object&id=' . $model->id . '&deleteID=' . $othermodel->id . '&searchByNumber=' . $model->searchByNumber;
+							$url ='index.php?r=sites/sites/delete-object&id=' . $model->id . '&deleteID=' . $othermodel->id . '&searchByNumber=' . $model->searchByNumber;
 							return $url;
 						}
 					}                           
@@ -105,11 +105,11 @@ $this->params['breadcrumbs'][] = 'Связи';
 			'urlCreator' => function ($action, $othermodel, $key, $index) use ($model) {
 				
 				if ($action === 'joinOne') {
-					$url ='index.php?r=sites/join-object&id=' . $model->id . '&objID=' . $othermodel->objid . '&siteID=' . $model->id . '&relationID=2' . '&searchByNumber=' . $model->searchByNumber;
+					$url ='index.php?r=sites/sites/join-object&id=' . $model->id . '&objID=' . $othermodel->objid . '&siteID=' . $model->id . '&relationID=2' . '&searchByNumber=' . $model->searchByNumber;
 					return $url;
 				}
 				if ($action === 'joinOther') {
-					$url ='index.php?r=sites/join-object&id=' . $model->id . '&objID=' . $othermodel->objid . '&siteID=' . $model->id . '&relationID=3' . '&searchByNumber=' . $model->searchByNumber;
+					$url ='index.php?r=sites/sites/join-object&id=' . $model->id . '&objID=' . $othermodel->objid . '&siteID=' . $model->id . '&relationID=3' . '&searchByNumber=' . $model->searchByNumber;
 					return $url;
 				}
 
@@ -169,11 +169,11 @@ $this->params['breadcrumbs'][] = 'Связи';
 			'urlCreator' => function ($action, $othermodel, $key, $index) use ($model) {
 				
 				if ($action === 'joinOne') {
-					$url ='index.php?r=sites/join-object&id=' . $model->id . '&objID=' . $model->objid . '&siteID=' . $key . '&relationID=2' . '&searchByNumber=' . $model->searchByNumber;
+					$url ='index.php?r=sites/sites/join-object&id=' . $model->id . '&objID=' . $model->objid . '&siteID=' . $key . '&relationID=2' . '&searchByNumber=' . $model->searchByNumber;
 					return $url;
 				}
 				if ($action === 'joinOther') {
-					$url ='index.php?r=sites/join-object&id=' . $model->id . '&objID=' . $model->objid . '&siteID=' . $key . '&relationID=3' . '&searchByNumber=' . $model->searchByNumber;
+					$url ='index.php?r=sites/sites/join-object&id=' . $model->id . '&objID=' . $model->objid . '&siteID=' . $key . '&relationID=3' . '&searchByNumber=' . $model->searchByNumber;
 					return $url;
 				}
 			}                           

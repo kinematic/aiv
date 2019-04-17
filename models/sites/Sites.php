@@ -294,10 +294,11 @@ class Sites extends \yii\db\ActiveRecord
     }
     
     public function getSearchNr() {
-	$length = strlen($this->nr);
+		$length = strlen($this->nr);
+		// die($length);
 // 	if ($length < 8) {
 	    $nr = null;
-	    if ($length >= 4) $nr = substr($this->nr, $length - 4, 4) + 0;
+	    if ($length >= 4 and $length < 8) $nr = substr($this->nr, $length - 4, 4) + 0;
 	    else $nr = $this->nr;
 // 	    if ($length == 3) $nr = $this->nr;
 // 

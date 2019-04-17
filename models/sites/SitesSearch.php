@@ -26,6 +26,7 @@ class SitesSearch extends Sites
         return [
             [['id', 'typeid', 'regionid', 'objid', 'relationid', 'statusid', 'molid', 'oblid2', 'siteid'], 'integer'],
             [['nr', 'description', 'opendate', 'closedate', 'inventdate', 'sitename', 'relation', 'sitetype'], 'safe'],
+			[['nr'], 'filter', 'filter' => 'trim', 'skipOnArray' => true],
         ];
     }
 

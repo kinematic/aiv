@@ -416,6 +416,7 @@ class SitesController extends Controller
 	public function actionDeleteObject($id, $deleteID, $searchByNumber)
     {
 		$deleteModel = $this->findModel($deleteID);
+		// die(print_r($deleteModel));
 		$objID = $deleteModel->objid;
 		$objCount = Sites::find()->where(['objid' => $objID])->count();
 
