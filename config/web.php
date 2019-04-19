@@ -67,8 +67,8 @@ $config = [
         */
     ],
 	'modules' => [
-		'import' => [
-			'class' => 'app\modules\admin\Import',
+		'admin' => [
+			'class' => 'app\modules\admin\Admin',
 		],
 	],
     'params' => $params,

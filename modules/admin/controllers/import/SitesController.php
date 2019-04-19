@@ -1,10 +1,10 @@
 <?php
 
-namespace app\controllers\import;
+namespace app\modules\admin\controllers\import;
 
 use Yii;
-use app\models\import\Sites;
-use app\models\import\SitesSearch;
+use app\modules\admin\models\import\Sites;
+use app\modules\admin\models\import\SitesSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -82,6 +82,9 @@ class SitesController extends Controller
 		Yii::$app->db->createCommand()->truncateTable('rbs_mustang.sites')->execute();
 		
 		Yii::$app->db->createCommand(
+		
+		// COPY mustang(object,planedaddress,realaddress,juricaladdress, contacts, startdate, closedate, mol, status, inventory, lastinventorydate) 
+// FROM '/var/www/localhost/htdocs/aiv/web/files/objects_utf8.csv' DELIMITER ';' CSV HEADER;
 		"
 			LOAD DATA LOW_PRIORITY INFILE 'C:/aiv/web/files/objects.csv' 
 			INTO TABLE rbs_mustang.sites  
