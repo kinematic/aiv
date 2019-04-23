@@ -30,6 +30,12 @@ class m190419_173045_mustang extends Migration
 			'status' => $this->string(200)->defaultValue(null),
 			'inventory' => $this->string(200)->defaultValue(null),
 			'lastinventorydate' => $this->date()->defaultValue(null),
+			'typeid' => $this->integer(),
+			'regionid' => $this->integer(),
+			'nr' => $this->string(20),
+			'molid' => $this->integer(),
+			'statusid' => $this->integer(),
+			'inventoryid' => $this->integer(),
         ], $options);
     }
 

@@ -33,6 +33,7 @@ class Contacts extends \yii\db\ActiveRecord
             [['objid'], 'integer'],
             [['contact'], 'string', 'max' => 100],
             [['description'], 'string', 'max' => 250],
+			[['contact', 'description'], 'filter', 'filter' => 'trim', 'skipOnArray' => true],
         ];
     }
 
