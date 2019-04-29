@@ -33,16 +33,34 @@ class m190423_183411_functions extends Migration
 		
 		Yii::$app->db->createCommand(
 			"
-				CREATE OR REPLACE FUNCTION inventory(word TEXT) RETURNS INT AS $$
+				CREATE OR REPLACE view people_names AS
+				SELECT p.firstname || ' ' || substring(ps.name from 1 for 1) || '.' || substring(pp.name from 1 for 1) || '.' AS mustangname
+				FROM people p
+				INNER JOIN people_secondname ps ON p.secondnameid = ps.id
+				INNER JOIN people_patronymicname pp ON p.patronymicnameid = pp.i
+			"
+		)->execute();
+		
+		Yii::$app->db->createCommand(
+			"
+				CREATE OR REPLACE FUNCTION mol(word text) RETURNS int AS $$
 				DECLARE
+					-- res TEXT := 'abcdefghijklmnopqrstuvwxyz';
 				BEGIN
-					IF word = 'True' THEN 
-						RETURN 1;
-					ELSIF word = 'False' THEN
-						RETURN NULL;
-					ELSE RETURN NULL;
-					END IF;
-				END;
+					RETURN (SELECT id FROM people_names WHERE mustangname LIKE word || '%' LIMIT 1);
+				end;
+				$$ LANGUAGE 'plpgsql'
+			"
+		)->execute();
+				
+		Yii::$app->db->createCommand(
+			"
+				CREATE OR REPLACE FUNCTION typeid(word text) RETURNS int AS $$
+				DECLARE
+					-- res TEXT := 'abcdefghijklmnopqrstuvwxyz';
+				BEGIN
+					RETURN (SELECT id FROM sitestype WHERE word LIKE name || '%' ORDER BY LENGTH(name) DESC LIMIT 1);
+				end;
 				$$ LANGUAGE 'plpgsql'
 			"
 		)->execute();
@@ -51,44 +69,14 @@ class m190423_183411_functions extends Migration
     public function down()
     {
         echo "m190423_183411_functions cannot be reverted.\n";
-
-        return false;
+		Yii::$app->db->createCommand("DROP FUNCTION status")->execute();
+		Yii::$app->db->createCommand("DROP VIEW people_names")->execute();
+        return true;
     }
  
 }
 
-CREATE DATABASE  IF NOT EXISTS `rbs_mustang` /*!40100 DEFAULT CHARACTER SET cp1251 */;
-USE `rbs_mustang`;
--- MySQL dump 10.13  Distrib 5.7.2-m12, for Win32 (x86)
---
--- Host: 127.0.0.1    Database: rbs_mustang
--- ------------------------------------------------------
--- Server version	5.7.2-m12
 
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8 */;
-/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
-/*!40103 SET TIME_ZONE='+00:00' */;
-/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
-/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
-/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
-/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
-
---
--- Dumping routines for database 'rbs_mustang'
---
-/*!50003 DROP FUNCTION IF EXISTS `concat_addresses` */;
-/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
-/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
-/*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8 */ ;
-/*!50003 SET character_set_results = utf8 */ ;
-/*!50003 SET collation_connection  = utf8_general_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = 'NO_ENGINE_SUBSTITUTION' */ ;
-DELIMITER ;;
 CREATE DEFINER=`kinematic`@`%` FUNCTION `concat_addresses`(address1 TEXT, address2 TEXT, address3 TEXT) RETURNS text CHARSET cp1251
 BEGIN
 	DECLARE address TEXT DEFAULT NULL;
@@ -115,19 +103,7 @@ BEGIN
 RETURN NULLIF(address, '');
 END ;;
 DELIMITER ;
-/*!50003 SET sql_mode              = @saved_sql_mode */ ;
-/*!50003 SET character_set_client  = @saved_cs_client */ ;
-/*!50003 SET character_set_results = @saved_cs_results */ ;
-/*!50003 SET collation_connection  = @saved_col_connection */ ;
-/*!50003 DROP FUNCTION IF EXISTS `correct_sitename` */;
-/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
-/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
-/*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = cp1251 */ ;
-/*!50003 SET character_set_results = cp1251 */ ;
-/*!50003 SET collation_connection  = cp1251_general_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = 'NO_ENGINE_SUBSTITUTION' */ ;
+
 DELIMITER ;;
 CREATE DEFINER=`kinematic`@`%` FUNCTION `correct_sitename`(sitename CHAR(30)) RETURNS char(30) CHARSET cp1251
 BEGIN
@@ -136,19 +112,7 @@ BEGIN
 RETURN sitename;
 END ;;
 DELIMITER ;
-/*!50003 SET sql_mode              = @saved_sql_mode */ ;
-/*!50003 SET character_set_client  = @saved_cs_client */ ;
-/*!50003 SET character_set_results = @saved_cs_results */ ;
-/*!50003 SET collation_connection  = @saved_col_connection */ ;
-/*!50003 DROP FUNCTION IF EXISTS `define_molid` */;
-/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
-/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
-/*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8 */ ;
-/*!50003 SET character_set_results = utf8 */ ;
-/*!50003 SET collation_connection  = utf8_general_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = 'NO_ENGINE_SUBSTITUTION' */ ;
+
 DELIMITER ;;
 CREATE DEFINER=`kinematic`@`localhost` FUNCTION `define_molid`(man CHAR(255) CHARSET cp1251) RETURNS int(11)
 BEGIN
@@ -161,19 +125,7 @@ BEGIN
 	RETURN p;
 END ;;
 DELIMITER ;
-/*!50003 SET sql_mode              = @saved_sql_mode */ ;
-/*!50003 SET character_set_client  = @saved_cs_client */ ;
-/*!50003 SET character_set_results = @saved_cs_results */ ;
-/*!50003 SET collation_connection  = @saved_col_connection */ ;
-/*!50003 DROP FUNCTION IF EXISTS `define_nr` */;
-/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
-/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
-/*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = cp1251 */ ;
-/*!50003 SET character_set_results = cp1251 */ ;
-/*!50003 SET collation_connection  = cp1251_general_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = 'NO_ENGINE_SUBSTITUTION' */ ;
+
 DELIMITER ;;
 CREATE DEFINER=`kinematic`@`%` FUNCTION `define_nr`(sitename CHAR(30), typeid INT(11), regionid INT(11)) RETURNS char(30) CHARSET cp1251
 BEGIN
@@ -183,19 +135,7 @@ BEGIN
 RETURN sitename;
 END ;;
 DELIMITER ;
-/*!50003 SET sql_mode              = @saved_sql_mode */ ;
-/*!50003 SET character_set_client  = @saved_cs_client */ ;
-/*!50003 SET character_set_results = @saved_cs_results */ ;
-/*!50003 SET collation_connection  = @saved_col_connection */ ;
-/*!50003 DROP FUNCTION IF EXISTS `define_regionid` */;
-/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
-/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
-/*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = cp1251 */ ;
-/*!50003 SET character_set_results = cp1251 */ ;
-/*!50003 SET collation_connection  = cp1251_general_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = 'NO_ENGINE_SUBSTITUTION' */ ;
+
 DELIMITER ;;
 CREATE DEFINER=`kinematic`@`%` FUNCTION `define_regionid`(sitename CHAR(30), typeid INT(11)) RETURNS int(11)
 BEGIN
@@ -223,19 +163,7 @@ BEGIN
 RETURN regionid;
 END ;;
 DELIMITER ;
-/*!50003 SET sql_mode              = @saved_sql_mode */ ;
-/*!50003 SET character_set_client  = @saved_cs_client */ ;
-/*!50003 SET character_set_results = @saved_cs_results */ ;
-/*!50003 SET collation_connection  = @saved_col_connection */ ;
-/*!50003 DROP FUNCTION IF EXISTS `define_statusid` */;
-/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
-/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
-/*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8 */ ;
-/*!50003 SET character_set_results = utf8 */ ;
-/*!50003 SET collation_connection  = utf8_general_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = 'NO_ENGINE_SUBSTITUTION' */ ;
+
 DELIMITER ;;
 CREATE DEFINER=`kinematic`@`localhost` FUNCTION `define_statusid`(statusname CHAR(30)) RETURNS int(11)
 BEGIN
@@ -247,19 +175,7 @@ BEGIN
 		RETURN p;
 	END ;;
 DELIMITER ;
-/*!50003 SET sql_mode              = @saved_sql_mode */ ;
-/*!50003 SET character_set_client  = @saved_cs_client */ ;
-/*!50003 SET character_set_results = @saved_cs_results */ ;
-/*!50003 SET collation_connection  = @saved_col_connection */ ;
-/*!50003 DROP FUNCTION IF EXISTS `define_typeid` */;
-/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
-/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
-/*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = cp1251 */ ;
-/*!50003 SET character_set_results = cp1251 */ ;
-/*!50003 SET collation_connection  = cp1251_general_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = 'NO_ENGINE_SUBSTITUTION' */ ;
+
 DELIMITER ;;
 CREATE DEFINER=`kinematic`@`%` FUNCTION `define_typeid`(sitename CHAR(30)) RETURNS int(11)
 BEGIN
@@ -268,19 +184,7 @@ BEGIN
 RETURN typeid;
 END ;;
 DELIMITER ;
-/*!50003 SET sql_mode              = @saved_sql_mode */ ;
-/*!50003 SET character_set_client  = @saved_cs_client */ ;
-/*!50003 SET character_set_results = @saved_cs_results */ ;
-/*!50003 SET collation_connection  = @saved_col_connection */ ;
-/*!50003 DROP FUNCTION IF EXISTS `replace_symbol` */;
-/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
-/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
-/*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8 */ ;
-/*!50003 SET character_set_results = utf8 */ ;
-/*!50003 SET collation_connection  = utf8_general_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = 'NO_ENGINE_SUBSTITUTION' */ ;
+
 DELIMITER ;;
 CREATE DEFINER=`kinematic`@`%` FUNCTION `replace_symbol`(val TEXT) RETURNS text CHARSET cp1251
 BEGIN
@@ -288,19 +192,3 @@ BEGIN
 RETURN NULLIF(REPLACE(val, '?', 'і'), '');
 END ;;
 DELIMITER ;
-/*!50003 SET sql_mode              = @saved_sql_mode */ ;
-/*!50003 SET character_set_client  = @saved_cs_client */ ;
-/*!50003 SET character_set_results = @saved_cs_results */ ;
-/*!50003 SET collation_connection  = @saved_col_connection */ ;
-/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
-
-/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
-/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
-/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
-/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
-
--- Dump completed on 2017-04-13 15:26:56
-

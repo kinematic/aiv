@@ -166,6 +166,36 @@ class MustangController extends Controller
 			"
 		)->execute();
 		
+		Yii::$app->db->createCommand(
+			"
+				UPDATE mustang SET mol = REPLACE(mol, '?', 'і') WHERE mol LIKE '%?%';
+			"
+		)->execute();
+		
+		Yii::$app->db->createCommand(
+			"
+				UPDATE mustang SET planedaddress = REPLACE(planedaddress, '?', 'і') WHERE planedaddress LIKE '%?%';
+			"
+		)->execute();
+		
+		Yii::$app->db->createCommand(
+			"
+				UPDATE mustang SET realaddress = REPLACE(realaddress, '?', 'і') WHERE realaddress LIKE '%?%';
+			"
+		)->execute();
+		
+		Yii::$app->db->createCommand(
+			"
+				UPDATE mustang SET juricaladdress = REPLACE(juricaladdress, '?', 'і') WHERE juricaladdress LIKE '%?%';
+			"
+		)->execute();
+		
+		Yii::$app->db->createCommand(
+			"
+				UPDATE mustang SET molid = mol(mol) WHERE mol IS NOT NULL;
+			"
+		)->execute();
+		
         $searchModel = new MustangSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 

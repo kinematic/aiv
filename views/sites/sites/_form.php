@@ -45,7 +45,7 @@ use app\models\address\Gps;
 	    else $model->typenpid = NULL;
 	    ?>
 	    
-	    <?= $form->field($model, 'typenpid')->dropDownList(ArrayHelper::map(Typenp::find()->addOrderBy('name')->all(), 'id', 'name'), ['prompt'=>'']) ?>
+	    <?= $form->field($model, 'typenpid')->dropDownList(ArrayHelper::map(Typenp::find()->orderBy('name')->all(), 'id', 'name'), ['prompt'=>'']) ?>
 		    
 	</div>
 	<div class="col-md-4">
