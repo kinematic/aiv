@@ -106,49 +106,7 @@ class SitesController extends Controller
 			CSV 
 			HEADER;
 		"
-		// "
-			// LOAD DATA LOW_PRIORITY INFILE 'C:/aiv/web/files/objects.csv' 
-			// INTO TABLE rbs_mustang.sites  
-			// FIELDS TERMINATED BY ';' ENCLOSED BY '\"' LINES TERMINATED BY '\r\n' IGNORE 1 LINES	(
-			// `object`,
-			// @planedaddress, 
-			// @realaddress,		
-			// @juricaladdress, 
-			// `contacts`,
-			// @startdate,  		
-			// @closedate, 
-			// @mol, 
-			// `status`, 
-			// @inventory, 
-			// @lastinventorydate,
-			// @typeid, 
-			// @regionid, 
-			// @nr,
-			// @siteid,
-			// @statusid,
-			// @molid
-			// )
-			// SET 
-			// planedaddress=rbs_mustang.replace_symbol(@planedaddress),
-			// realaddress=rbs_mustang.replace_symbol(@realaddress),
-			// juricaladdress=rbs_mustang.replace_symbol(@juricaladdress),
-			// closedate=NULLIF(STR_TO_DATE(@closedate, '%d.%m.%Y'), '0000-00-00'),
-			// inventory=IF(@inventory = 'True', 1, NULL),
-			// lastinventorydate=NULLIF(STR_TO_DATE(@lastinventorydate, '%d.%m.%Y'), '0000-00-00'), 
-			// startdate=NULLIF(STR_TO_DATE(@startdate, '%d.%m.%Y'), '0000-00-00'),
-			// object=rbs_mustang.correct_sitename(object),
-			// typeid=rbs_mustang.define_typeid(object), 
-			// regionid=rbs_mustang.define_regionid(object, typeid), 
-			// nr=rbs_mustang.define_nr(object, typeid, regionid),
-			// siteid=rbs_sites.definesiteid(typeid, regionid, nr),
-			// statusid=rbs_mustang.define_statusid(`status`),
-			// mol=rbs_mustang.replace_symbol(@mol),
-			// molid=rbs_mustang.define_molid(mol)
-		
-		
-		// "
-		
-		
+	
 		)->execute();
 		
 		// );

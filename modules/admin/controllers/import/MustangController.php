@@ -196,6 +196,30 @@ class MustangController extends Controller
 			"
 		)->execute();
 		
+		Yii::$app->db->createCommand(
+			"
+				UPDATE mustang SET typeid = typeid(object);
+			"
+		)->execute();
+		
+		Yii::$app->db->createCommand(
+			"
+				UPDATE mustang SET object = REPLACE(object, (SELECT st.name FROM sitestype st WHERE st.id = typeid), '');
+			"
+		)->execute();
+		
+		Yii::$app->db->createCommand(
+			"
+				UPDATE mustang SET object = TRIM(object);
+			"
+		)->execute();
+		
+		Yii::$app->db->createCommand(
+			"
+				UPDATE mustang SET object = REPLACE(object, (SELECT sr.name FROM sitesregion sr WHERE sr.id = regionid), '');
+			"
+		)->execute();
+		
         $searchModel = new MustangSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 

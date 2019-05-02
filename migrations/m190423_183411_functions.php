@@ -64,6 +64,17 @@ class m190423_183411_functions extends Migration
 				$$ LANGUAGE 'plpgsql'
 			"
 		)->execute();
+				
+		Yii::$app->db->createCommand(
+			"
+				CREATE OR REPLACE FUNCTION regionid(word text) RETURNS int AS $$
+				DECLARE
+				BEGIN
+					RETURN (SELECT id FROM sitesregion WHERE word LIKE name || '%' ORDER BY LENGTH(name) DESC LIMIT 1);
+				end;
+				$$ LANGUAGE 'plpgsql'
+			"
+		)->execute();
 	}
 
     public function down()
